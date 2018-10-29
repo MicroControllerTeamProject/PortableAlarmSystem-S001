@@ -8,10 +8,25 @@ before_install:
   - sudo mv arduino-1.8.5 /usr/local/share/arduino
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
   - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/PortableAlarmSystem-S001/Libraries
+
   - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.h $PWD/PortableAlarmSystem-S001
   - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.cpp $PWD/PortableAlarmSystem-S001
 
-  
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/MyBlueTooth/*.h $PWD/PortableAlarmSystem-S001
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/MyBlueTooth/*.cpp $PWD/PortableAlarmSystem-S001
+
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/BlueToothDynamicInterface/*.h $PWD/PortableAlarmSystem-S001
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/BlueToothDynamicInterface/*.cpp $PWD/PortableAlarmSystem-S001
+
+   - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_EEpromRW/*.h $PWD/PortableAlarmSystem-S001
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_EEpromRW/*.cpp $PWD/PortableAlarmSystem-S001
+
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_Utils/*.h $PWD/PortableAlarmSystem-S001
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_Utils/*.cpp $PWD/PortableAlarmSystem-S001
+
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_ActivityManager/*.h $PWD/PortableAlarmSystem-S001
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_ActivityManager/*.cpp $PWD/PortableAlarmSystem-S001
+ 
 script:
   - arduino --verbose-build --verify --board arduino:avr:uno $PWD/PortableAlarmSystem-S001/PortableAlarmSystem.ino
 notifications:
