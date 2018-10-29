@@ -7,13 +7,13 @@
 //#include <MemoryFree.h>
 //#include <pgmStrToRAM.h>
 //#include <ChipTemp.h>
-#include <MyBlueTooth.h>
-#include <BlueToothCommandsUtil.h>
-#include <LSG_EEpromRW.h>
-#include <EEPROM.h>
+#include "MyBlueTooth.h"
+#include "BlueToothCommandsUtil.h"
+#include "LSG_EEpromRW.h"
+#include "EEPROM.h"
 //#include <StringFunctions.h>
-#include <MySim900.h>
-#include <ActivityManager.h> 
+#include "MySim900.h"
+#include "ActivityManager.h"
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);  
 
