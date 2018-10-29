@@ -27,7 +27,7 @@ before_install:
   - cp $PWD/PortableAlarmSystem-S001/Libraries/LSG_ActivityManager/*.cpp $PWD/PortableAlarmSystem-S001
  
 script:
-  - arduino --verbose-build --verify --board arduino:avr:uno $PWD/PortableAlarmSystem-S001/PortableAlarmSystem.ino
+  - arduino --verbose-build --verify --board arduino:avr:nano:cpu=atmega328 $PWD/PortableAlarmSystem-S001/PortableAlarmSystem.ino
 notifications:
   email: 
     on_success: change 
