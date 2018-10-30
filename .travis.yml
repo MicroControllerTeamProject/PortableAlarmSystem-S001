@@ -10,13 +10,9 @@ before_install:
 
   - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/BasicPortableAlarmSystem/Libraries
 
-  - cd $PWD/BasicPortableAlarmSystem/Libraries/LSG_ActivityManager
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEPromRW/*.h $PWD/BasicPortableAlarmSystem
 
-  - dir
-
-  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEpromRW/*.h $PWD/BasicPortableAlarmSystem
-
-  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEpromRW/*.cpp $PWD/BasicPortableAlarmSystem
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEPromRW/*.cpp $PWD/BasicPortableAlarmSystem
 
   - cp $PWD/BasicPortableAlarmSystem/Libraries/LSG_ActivityManager/*.h $PWD/BasicPortableAlarmSystem
   - cp $PWD/BasicPortableAlarmSystem/Libraries/LSG_ActivityManager/*.cpp $PWD/BasicPortableAlarmSystem
