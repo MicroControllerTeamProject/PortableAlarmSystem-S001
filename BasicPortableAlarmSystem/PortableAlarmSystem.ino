@@ -21,7 +21,7 @@ ActivityManager* _delayForVoltage = new ActivityManager(60);
 
 ActivityManager* _delayForCallNumbers = new ActivityManager(600); 
 
-ActivityManager* _delayForFindPhone = new ActivityManager(15);
+ActivityManager* _delayForFindPhone = new ActivityManager(15); 
 
 ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
