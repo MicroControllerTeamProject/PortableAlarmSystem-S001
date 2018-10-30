@@ -9,12 +9,9 @@ before_install:
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
   - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/PortableAlarmSystem-S001/Libraries
 
-  - cd BasicPortableAlarmSystem
-  - dir
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.h $PWD/BasicPortableAlarmSystem
 
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.h $PWD/PortableAlarmSystem-S001/BasicPortableAlarmSystem
-
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.cpp $PWD/PortableAlarmSystem-S001/BasicPortableAlarmSystem
+  - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.cpp $PWD/BasicPortableAlarmSystem
 
  
 script:
