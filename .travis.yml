@@ -15,7 +15,7 @@ before_install:
 
  
 script:
-  - arduino --verbose-build --verify --board arduino:avr:uno $PWD/PortableAlarmSystem-S001/BasicPortableAlarmSystem/PortableAlarmSystem.ino
+  - arduino --verbose-build --verify --board arduino:avr:uno $PWD/BasicPortableAlarmSystem/PortableAlarmSystem.ino
 notifications:
   email: 
     on_success: change 
