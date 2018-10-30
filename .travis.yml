@@ -12,6 +12,10 @@ before_install:
 
   
 
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/OneWire/*.h $PWD/BasicPortableAlarmSystem
+
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/OneWire/*.cpp $PWD/BasicPortableAlarmSystem
+
   - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LiquidCrystal_I2C/*.h $PWD/BasicPortableAlarmSystem
 
   - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LiquidCrystal_I2C/*.cpp $PWD/BasicPortableAlarmSystem
