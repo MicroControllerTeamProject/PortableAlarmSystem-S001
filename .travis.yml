@@ -10,21 +10,15 @@ before_install:
 
   - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/BasicPortableAlarmSystem/Libraries
 
-  - sleep 3
 
-  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEpromRW/LSGEEpromRW.h $PWD/BasicPortableAlarmSystem 
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/analogReadXXbit/*.h $PWD/BasicPortableAlarmSystem 
 
-  - cp --verbose  $PWD/BasicPortableAlarmSystem/Libraries/LSGEEpromRW/LSGEEpromRW.cpp $PWD/BasicPortableAlarmSystem 
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/analogReadXXbit/*.cpp $PWD/BasicPortableAlarmSystem
 
-
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.h $PWD/BasicPortableAlarmSystem 
-
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.cpp $PWD/BasicPortableAlarmSystem
-
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/MyBlueTooth/*.h $PWD/BasicPortableAlarmSystem
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/MyBlueTooth/*.cpp $PWD/BasicPortableAlarmSystem
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/BlueToothDynamicInterface/*.h $PWD/BasicPortableAlarmSystem
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/BlueToothDynamicInterface/*.cpp $PWD/BasicPortableAlarmSystem
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/MyBlueTooth/*.h $PWD/BasicPortableAlarmSystem
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/MyBlueTooth/*.cpp $PWD/BasicPortableAlarmSystem
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/BlueToothDynamicInterface/*.h $PWD/BasicPortableAlarmSystem
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/BlueToothDynamicInterface/*.cpp $PWD/BasicPortableAlarmSystem
 
 
  
