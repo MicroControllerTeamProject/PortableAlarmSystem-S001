@@ -10,6 +10,12 @@ before_install:
 
   - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/BasicPortableAlarmSystem/Libraries
 
+  
+
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LiquidCrystal_I2C/*.h $PWD/BasicPortableAlarmSystem
+
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LiquidCrystal_I2C/*.cpp $PWD/BasicPortableAlarmSystem
+
   - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEPromRW/*.h $PWD/BasicPortableAlarmSystem
 
   - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEPromRW/*.cpp $PWD/BasicPortableAlarmSystem
