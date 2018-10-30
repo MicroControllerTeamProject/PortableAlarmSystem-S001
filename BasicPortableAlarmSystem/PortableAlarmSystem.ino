@@ -14,7 +14,7 @@
 //#include <StringFunctions.h>
 #include "MySim900.h"
 #include "ActivityManager.h"
-
+ 
 ActivityManager* _delayForTemperature = new ActivityManager(60);  
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
