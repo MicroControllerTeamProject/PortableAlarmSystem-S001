@@ -7,11 +7,12 @@ before_install:
   - tar xf arduino-1.8.5-linux64.tar.xz
   - sudo mv arduino-1.8.5 /usr/local/share/arduino
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
-  - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/PortableAlarmSystem-S001/Libraries
 
-  - cp --verbose $PWD/PortableAlarmSystem-S001/Libraries/LSGEEpromRW/*.h $PWD/BasicPortableAlarmSystem 
+  - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/BasicPortableAlarmSystem/Libraries
 
-  - cp $PWD/PortableAlarmSystem-S001/Libraries/LSGEEpromRW/*.cpp $PWD/BasicPortableAlarmSystem 
+  - cp --verbose $PWD/BasicPortableAlarmSystem/Libraries/LSGEEpromRW/*.h $PWD/BasicPortableAlarmSystem 
+
+  - cp $PWD/BasicPortableAlarmSystem/Libraries/LSGEEpromRW/*.cpp $PWD/BasicPortableAlarmSystem 
 
 
   - cp $PWD/PortableAlarmSystem-S001/Libraries/analogReadXXbit/*.h $PWD/BasicPortableAlarmSystem 
