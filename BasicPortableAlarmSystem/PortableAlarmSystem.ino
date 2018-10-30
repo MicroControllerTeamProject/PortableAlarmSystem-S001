@@ -10,7 +10,7 @@
 #include "MyBlueTooth.h"
 #include "BlueToothCommandsUtil.h"
 #include "LSGEEpromRW.h" 
-#include "EEPROM.h"
+#include <EEPROM.h>
 //#include <StringFunctions.h>
 #include "MySim900.h"
 #include "ActivityManager.h"
