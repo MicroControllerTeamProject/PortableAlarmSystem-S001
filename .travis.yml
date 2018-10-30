@@ -10,7 +10,7 @@ before_install:
 
   - git submodule add https://github.com/MicroControllerTeamProject/Libraries $PWD/BasicPortableAlarmSystem/Libraries
 
-  -cd BasicPortableAlarmSystem/Libraries
+  -cd BasicPortableAlarmSystem/Libraries 
 
   - dir
 
