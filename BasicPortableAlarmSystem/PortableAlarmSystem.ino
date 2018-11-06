@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
  
-ActivityManager* _delayForTemperature = new ActivityManager(60);  
+ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
@@ -98,7 +98,7 @@ uint8_t _isBTSleepON = 1;
 
 uint8_t _phoneNumbers = 0;
 
-uint8_t _isFindOutPhonesON = 0;
+uint8_t _findOutPhonesMode = 0;
 
 uint8_t _callNumbers = 0;
 
@@ -203,7 +203,7 @@ void setup()
 
 	initilizeEEPromData();
 
-	if (_isFindOutPhonesON != 0)
+	if (_findOutPhonesMode != 0)
 	{
 		_isBTSleepON = 0;
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Find activated"), BlueToothCommandsUtil::Message));
@@ -258,7 +258,7 @@ void initilizeEEPromData()
 */
 	eepromRW->eeprom_read_string(_addressStartFindOutPhonesON, _bufFindOutPhonesON, BUFSIZEFINDOUTPHONESON);
 
-	_isFindOutPhonesON = atoi(&_bufFindOutPhonesON[0]);
+	_findOutPhonesMode = atoi(&_bufFindOutPhonesON[0]);
 
 	eepromRW->eeprom_read_string(_addressStartBufPirSensorIsON, _bufPirSensorIsON, BUFSIZEPIRSENSORISON);
 
@@ -401,7 +401,7 @@ void callSim900(char isLongCaller)
 
 	mySim900->ClearBuffer(2000);
 
-	if (_isFindOutPhonesON == 0)
+	if (_findOutPhonesMode == 0)
 	{
 		turnOnBlueToothAndSetTurnOffTimer();
 	}
@@ -429,7 +429,7 @@ String getSignalStrength()
 
 void turnOffBluetoohIfTimeIsOver()
 {
-	if (_isFindOutPhonesON == 0
+	if (_findOutPhonesMode == 0
 		&& (millis() > timeAfterPowerOn) &&
 		btSerial->isBlueToothOn()
 		&& _isBTSleepON
@@ -462,7 +462,7 @@ void turnOnBlueToothIfMotionIsDetected()
 bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 {
 	if (_isDisableCall) { return; }
-	if ((_isFindOutPhonesON == 1 || _isFindOutPhonesON == 2) && (millis() > _timeAfterPowerOnForBTFinder))
+	if ((_findOutPhonesMode == 1 || _findOutPhonesMode == 2) && (millis() > _timeAfterPowerOnForBTFinder))
 	{
 		if (_isMasterMode == false)
 		{
@@ -517,7 +517,7 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 		}
 		else
 		{
-			if (_isFindOutPhonesON == 2)
+			if (_findOutPhonesMode == 2)
 			{
 				callSim900('1');
 				//delay(10000);
@@ -592,7 +592,7 @@ void isMotionDetect()
 		{
 			_whatIsHappened = F("M");
 
-			if (_isFindOutPhonesON == 1)
+			if (_findOutPhonesMode == 1)
 			{
 				if (!_isDeviceDetected)
 				{
@@ -607,7 +607,7 @@ void isMotionDetect()
 			}
 			//Accendo bluetooth con ritardo annesso solo se è scattato allarme,troppo critico
 			//per perdere tempo se non scattato allarme.
-			if (btSerial->isBlueToothOff() && _isFindOutPhonesON == 0)
+			if (btSerial->isBlueToothOff() && _findOutPhonesMode == 0)
 			{
 				delay(30000);
 				turnOnBlueToothAndSetTurnOffTimer();
@@ -833,7 +833,16 @@ void blueToothConfigurationSystem()
 			String(F("2Phone:")).toCharArray(commandString, 15);
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
 
-			if (!_isPIRSensorActivated)
+			String(F("TempMax:")).toCharArray(commandString, 15);
+			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
+
+			String(F("OffSetTemp:")).toCharArray(commandString, 15);
+			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_offSetTempValue), BlueToothCommandsUtil::Data, F("095")));
+
+			String(F("Apn:")).toCharArray(commandString, 15);
+			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
+			
+			if (!_isPIRSensorActivated && _findOutPhonesMode != 2)
 			{
 				String(F("Prec.:")).toCharArray(commandString, 15);
 				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
@@ -842,34 +851,31 @@ void blueToothConfigurationSystem()
 			/*String(F("TempON:")).toCharArray(commandString, 15);
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isTemperatureCheckOn), BlueToothCommandsUtil::Data, F("003")));*/
 			
-			String(F("TempMax:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
+			
 
-			String(F("PIR status:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
+			if (_findOutPhonesMode != 2)
+			{
+				String(F("PIR status:")).toCharArray(commandString, 15);
+				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
+			}
 
-			String(F("Apn:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
-		
-			if (!_isPIRSensorActivated)
+			if( _findOutPhonesMode !=0)
 			{
 				String(F("Addr:")).toCharArray(commandString, 15);
 				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceAddress, BlueToothCommandsUtil::Data, F("010")));
 
 				String(F("Name:")).toCharArray(commandString, 15);
 				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceName, BlueToothCommandsUtil::Data, F("011")));
-			}
 
-			String(F("OffSetTemp:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_offSetTempValue), BlueToothCommandsUtil::Data, F("095")));
+				String(F("FindTime.:")).toCharArray(commandString, 15);
+				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
+				
+			}
 
 			if (!_isPIRSensorActivated)
 			{
 				String(F("Find phone:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isFindOutPhonesON), BlueToothCommandsUtil::Data, F("012")));
-				
-				String(F("FindTime.:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
+				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
 			}
 
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
@@ -1107,8 +1113,8 @@ void blueToothConfigurationSystem()
 
 				splitString.toCharArray(_bufFindOutPhonesON, BUFSIZEFINDOUTPHONESON);
 				eepromRW->eeprom_write_string(_addressStartFindOutPhonesON, _bufFindOutPhonesON);
-				_isFindOutPhonesON = atoi(&_bufFindOutPhonesON[0]);
-				if (_isFindOutPhonesON != 0)
+				_findOutPhonesMode = atoi(&_bufFindOutPhonesON[0]);
+				if (_findOutPhonesMode != 0)
 				{
 					_isBTSleepON = 0;
 				}
@@ -1258,7 +1264,7 @@ void pirSensorActivity()
 			_whatIsHappened = F("P");
 
 
-			if (_isFindOutPhonesON == 1)
+			if (_findOutPhonesMode == 1)
 			{
 				if (!_isDeviceDetected)
 				{
