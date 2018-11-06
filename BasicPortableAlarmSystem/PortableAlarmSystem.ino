@@ -92,7 +92,7 @@ String _phoneNumberAlternative;
 
 String _whatIsHappened = "";
 
-uint8_t _isTemperatureCheckOn = 0;
+//uint8_t _isTemperatureCheckOn = 0;
 
 uint8_t _isBTSleepON = 1;
 
@@ -252,10 +252,10 @@ void initilizeEEPromData()
 	_findMode = atoi(&_bufFindMode[0]);*/
 
 
-	eepromRW->eeprom_read_string(_addressStartBufTemperatureIsOn, _bufTemperatureIsOn, BUFSIZETEMPERATUREISON);
+	/*eepromRW->eeprom_read_string(_addressStartBufTemperatureIsOn, _bufTemperatureIsOn, BUFSIZETEMPERATUREISON);
 
 	_isTemperatureCheckOn = atoi(&_bufTemperatureIsOn[0]);
-
+*/
 	eepromRW->eeprom_read_string(_addressStartFindOutPhonesON, _bufFindOutPhonesON, BUFSIZEFINDOUTPHONESON);
 
 	_isFindOutPhonesON = atoi(&_bufFindOutPhonesON[0]);
@@ -837,8 +837,8 @@ void blueToothConfigurationSystem()
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
 			String(F("Prec.:")).toCharArray(commandString, 15);
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
-			String(F("TempON:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isTemperatureCheckOn), BlueToothCommandsUtil::Data, F("003")));
+			/*String(F("TempON:")).toCharArray(commandString, 15);
+			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isTemperatureCheckOn), BlueToothCommandsUtil::Data, F("003")));*/
 			String(F("TempMax:")).toCharArray(commandString, 15);
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
 			String(F("PIR status:")).toCharArray(commandString, 15);
@@ -987,20 +987,20 @@ void blueToothConfigurationSystem()
 			updateCommand();
 		}
 
-		if (_bluetoothData.indexOf(F("D003")) > -1)
-		{
-			String splitString = splitStringIndex(_bluetoothData, ';', 1);
-			if (isValidNumber(splitString))
-			{
-				/*const int BUFSIZETEMPERATUREISON = 2;
-				char _bufTemperatureIsOn[BUFSIZETEMPERATUREISON];*/
+		//if (_bluetoothData.indexOf(F("D003")) > -1)
+		//{
+		//	String splitString = splitStringIndex(_bluetoothData, ';', 1);
+		//	if (isValidNumber(splitString))
+		//	{
+		//		/*const int BUFSIZETEMPERATUREISON = 2;
+		//		char _bufTemperatureIsOn[BUFSIZETEMPERATUREISON];*/
 
-				splitString.toCharArray(_bufTemperatureIsOn, BUFSIZETEMPERATUREISON);
-				eepromRW->eeprom_write_string(14, _bufTemperatureIsOn);
-				_isTemperatureCheckOn = atoi(&_bufTemperatureIsOn[0]);
-			}
-			updateCommand();
-		}
+		//		splitString.toCharArray(_bufTemperatureIsOn, BUFSIZETEMPERATUREISON);
+		//		eepromRW->eeprom_write_string(14, _bufTemperatureIsOn);
+		//		_isTemperatureCheckOn = atoi(&_bufTemperatureIsOn[0]);
+		//	}
+		//	updateCommand();
+		//}
 
 		//if (_bluetoothData.indexOf(F("D033")) > -1)
 		//{
@@ -1288,7 +1288,7 @@ void internalTemperatureActivity()
 {
 	if (_delayForTemperature->IsDelayTimeFinished(true))
 	{
-		if (_isTemperatureCheckOn == 0) return;
+		/*if (_isTemperatureCheckOn == 0) return;*/
 
 		/*ChipTemp* chipTemp = new ChipTemp();*/
 
