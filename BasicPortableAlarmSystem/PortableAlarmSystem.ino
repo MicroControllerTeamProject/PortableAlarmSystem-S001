@@ -830,7 +830,7 @@ void blueToothConfigurationSystem()
 			String(F("Ph.Altern.:")).toCharArray(commandString, 15);
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumberAlternative, BlueToothCommandsUtil::Data, F("099")));
 
-			String(F("2Phone:")).toCharArray(commandString, 15);
+			String(F("N.Phone:")).toCharArray(commandString, 15);
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
 
 			String(F("TempMax:")).toCharArray(commandString, 15);
