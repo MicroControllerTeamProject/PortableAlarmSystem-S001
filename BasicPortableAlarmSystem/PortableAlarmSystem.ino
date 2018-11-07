@@ -25,7 +25,6 @@ ActivityManager* _delayForFindPhone = new ActivityManager(15);
 
 ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
-
 MyBlueTooth* btSerial;
 
 MySim900* mySim900;
@@ -575,7 +574,7 @@ void loop()
 
 	blueToothConfigurationSystem();
 
-	//getCoordinates();
+	getCoordinates();
 }
 
 void isMotionDetect()
@@ -1413,97 +1412,97 @@ void listOfSmsCommands(String command)
 	}
 }
 
-//void getCoordinates()
-//{
-//	if (mySim900->IsAvailable() > 0)
-//	{
-//		mySim900->ReadIncomingChars2();
-//	}
-//
-//	char * apnCommand = new char[100];
-//
-//	char * apnString = new char[25];
-//
-//	_apn.toCharArray(apnString, (_apn.length() + 1));
-//
-//	strcpy(apnCommand, "AT + SAPBR = 3, 1,\"APN\", \"");
-//
-//	strcat(apnCommand, apnString);
-//
-//	strcat(apnCommand, "\"");
-//
-//	//Serial.println(apnCommand);
-//
-//	mySim900->ATCommand(apnCommand);
-//
-//	delete(apnString);
-//
-//	delete(apnCommand);
-//
-//	//"AT + SAPBR = 3, 1, \"Contype\", \"GPRS\""
-//	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"internet.wind\"");*/
-//	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"web.coopvoce.it\"");*/
-//	//mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"mobile.vodafone.it\"");
-//	//mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"wap.tim.it\"");
-//	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"ibox.tim.it\"");*/
-//
-//	delay(1500);
-//	if (mySim900->IsAvailable() > 0)
-//	{
-//		/*Serial.println(mySim900->ReadIncomingChars2());*/
-//		mySim900->ReadIncomingChars2();
-//
-//	}
-//	mySim900->ATCommand("AT + SAPBR = 0, 1");
-//	delay(2000);
-//	if (mySim900->IsAvailable() > 0)
-//	{
-//		//Serial.println(mySim900->ReadIncomingChars2());
-//		mySim900->ReadIncomingChars2();
-//
-//	}
-//	mySim900->ATCommand("AT + SAPBR = 1, 1");
-//	delay(2000);
-//	if (mySim900->IsAvailable() > 0)
-//	{
-//		//Serial.println(mySim900->ReadIncomingChars2());
-//		mySim900->ReadIncomingChars2();
-//
-//	}
-//	mySim900->ATCommand("AT + SAPBR = 2, 1");
-//	delay(1500);
-//	if (mySim900->IsAvailable() > 0)
-//	{
-//		//Serial.println(mySim900->ReadIncomingChars2());
-//		mySim900->ReadIncomingChars2();
-//
-//	}
-//	mySim900->ATCommand("AT + CIPGSMLOC = 1, 1");
-//	delay(10000);
-//	if (mySim900->IsAvailable() > 0)
-//	{
-//		String h = mySim900->ReadIncomingChars2();
-//		h.trim();
-//		/*Serial.println(h);
-//		Serial.println(h.indexOf(F("+CIPGSMLOC:")));
-//		Serial.println(h.substring(24, 35));*/
-//
-//		if (h.substring(24, 35) == F("+CIPGSMLOC:"))
-//		{
-//			String a = splitStringIndex(h, ',', 3);
-//			String b = splitStringIndex(h, ',', 2);
-//			String site = F("www.google.com/maps/search/?api=1&query=");
-//			site = site + a + "," + b;
-//			a.trim(); b.trim();
-//			/*	Serial.println(site);*/
-//			if (a != "" && b != "")
-//			{
-//				mySim900->SendTextMessageSimple(site, _prefix + _phoneNumber);
-//			}
-//		}
-//
-//	}
-//}
+void getCoordinates()
+{
+	if (mySim900->IsAvailable() > 0)
+	{
+		mySim900->ReadIncomingChars2();
+	}
+
+	char * apnCommand = new char[100];
+
+	char * apnString = new char[25];
+
+	_apn.toCharArray(apnString, (_apn.length() + 1));
+
+	strcpy(apnCommand, "AT + SAPBR = 3, 1,\"APN\", \"");
+
+	strcat(apnCommand, apnString);
+
+	strcat(apnCommand, "\"");
+
+	//Serial.println(apnCommand);
+
+	mySim900->ATCommand(apnCommand);
+
+	delete(apnString);
+
+	delete(apnCommand);
+
+	//"AT + SAPBR = 3, 1, \"Contype\", \"GPRS\""
+	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"internet.wind\"");*/
+	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"web.coopvoce.it\"");*/
+	//mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"mobile.vodafone.it\"");
+	//mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"wap.tim.it\"");
+	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"ibox.tim.it\"");*/
+
+	delay(1500);
+	if (mySim900->IsAvailable() > 0)
+	{
+		/*Serial.println(mySim900->ReadIncomingChars2());*/
+		mySim900->ReadIncomingChars2();
+
+	}
+	mySim900->ATCommand("AT + SAPBR = 0, 1");
+	delay(2000);
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
+
+	}
+	mySim900->ATCommand("AT + SAPBR = 1, 1");
+	delay(2000);
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
+
+	}
+	mySim900->ATCommand("AT + SAPBR = 2, 1");
+	delay(1500);
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
+
+	}
+	mySim900->ATCommand("AT + CIPGSMLOC = 1, 1");
+	delay(10000);
+	if (mySim900->IsAvailable() > 0)
+	{
+		String h = mySim900->ReadIncomingChars2();
+		h.trim();
+		/*Serial.println(h);
+		Serial.println(h.indexOf(F("+CIPGSMLOC:")));
+		Serial.println(h.substring(24, 35));*/
+
+		if (h.substring(24, 35) == F("+CIPGSMLOC:"))
+		{
+			String a = splitStringIndex(h, ',', 3);
+			String b = splitStringIndex(h, ',', 2);
+			String site = F("www.google.com/maps/search/?api=1&query=");
+			site = site + a + "," + b;
+			a.trim(); b.trim();
+			/*	Serial.println(site);*/
+			if (a != "" && b != "")
+			{
+				mySim900->SendTextMessageSimple(site, _prefix + _phoneNumber);
+			}
+		}
+
+	}
+}
 
 double getTemp(void)
 {
