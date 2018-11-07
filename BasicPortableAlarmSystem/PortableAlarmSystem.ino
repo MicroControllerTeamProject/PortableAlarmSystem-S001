@@ -703,7 +703,7 @@ String calculateBatteryLevel(float batteryLevel)
 
 }
 
-void loadFirstMenu()
+void loadMainMenu()
 {
 	char* alarmStatus = new char[15];
 	if (_isAlarmOn)
@@ -769,6 +769,70 @@ void loadFirstMenu()
 	delete(commandString);
 }
 
+void loadConfigurationMenu() 
+{
+	char* commandString = new char[15];
+	String(F("Configuration")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Title));
+
+	String(F("Phone:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumber, BlueToothCommandsUtil::Data, F("001")));
+
+	String(F("Ph.Altern.:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumberAlternative, BlueToothCommandsUtil::Data, F("099")));
+
+	String(F("N.Phone:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
+
+	String(F("TempMax:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
+
+	String(F("OffSetTemp:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_offSetTempValue), BlueToothCommandsUtil::Data, F("095")));
+
+	String(F("Apn:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
+
+	if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
+	{
+		String(F("Prec.:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
+	}
+
+	/*String(F("TempON:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isTemperatureCheckOn), BlueToothCommandsUtil::Data, F("003")));*/
+
+
+
+	if (_findOutPhonesMode == 0)
+	{
+		String(F("PIR status:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
+	}
+
+	if (_findOutPhonesMode != 0)
+	{
+		String(F("Addr:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceAddress, BlueToothCommandsUtil::Data, F("010")));
+
+		String(F("Name:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceName, BlueToothCommandsUtil::Data, F("011")));
+
+		String(F("FindTime.:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
+
+	}
+
+	if (!_isPIRSensorActivated)
+	{
+		String(F("Find phone:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
+	}
+
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
+	delete(commandString);
+}
+
 void blueToothConfigurationSystem()
 {
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
@@ -782,7 +846,7 @@ void blueToothConfigurationSystem()
 #pragma region Main Menu-#0
 		if (_bluetoothData.indexOf(F("#0")) > -1)
 		{
-			loadFirstMenu();
+			loadMainMenu();
 		}
 
 
@@ -798,7 +862,7 @@ void blueToothConfigurationSystem()
 			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm ON"), BlueToothCommandsUtil::Title));
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm ON"), BlueToothCommandsUtil::Message));
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
-			loadFirstMenu();
+			loadMainMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("C003")) > -1)
@@ -810,7 +874,7 @@ void blueToothConfigurationSystem()
 			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm OFF"), BlueToothCommandsUtil::Title));
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm OFF"), BlueToothCommandsUtil::Message));
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
-			loadFirstMenu();
+			loadMainMenu();
 		}
 #pragma endregion
 
@@ -826,66 +890,7 @@ void blueToothConfigurationSystem()
 #pragma region Configuration Menu-#M001
 		if (_bluetoothData.indexOf(F("M001")) > -1)
 		{
-			char* commandString = new char[15];
-			String(F("Configuration")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Title));
-
-			String(F("Phone:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumber, BlueToothCommandsUtil::Data, F("001")));
-
-			String(F("Ph.Altern.:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumberAlternative, BlueToothCommandsUtil::Data, F("099")));
-
-			String(F("N.Phone:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
-
-			String(F("TempMax:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
-
-			String(F("OffSetTemp:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_offSetTempValue), BlueToothCommandsUtil::Data, F("095")));
-
-			String(F("Apn:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
-			
-			if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
-			{
-				String(F("Prec.:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
-			}
-
-			/*String(F("TempON:")).toCharArray(commandString, 15);
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isTemperatureCheckOn), BlueToothCommandsUtil::Data, F("003")));*/
-			
-			
-
-			if (_findOutPhonesMode == 0)
-			{
-				String(F("PIR status:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
-			}
-
-			if( _findOutPhonesMode !=0)
-			{
-				String(F("Addr:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceAddress, BlueToothCommandsUtil::Data, F("010")));
-
-				String(F("Name:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceName, BlueToothCommandsUtil::Data, F("011")));
-
-				String(F("FindTime.:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
-				
-			}
-
-			if (!_isPIRSensorActivated)
-			{
-				String(F("Find phone:")).toCharArray(commandString, 15);
-				btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
-			}
-
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
-			delete(commandString);
+			loadConfigurationMenu();
 		}
 #pragma region Commands
 
@@ -905,7 +910,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(1, _bufPhoneNumber);
 				_phoneNumber = splitString;
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 
@@ -939,7 +944,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(_addressDelayFindMe, _bufDelayFindMe);
 				_delayFindMe = atoi(&_bufDelayFindMe[0]);
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 
@@ -952,7 +957,8 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(_addressOffSetTemperature, _bufOffSetTemperature);
 				_offSetTempValue = atoi(&_bufOffSetTemperature[0]);
 			}
-			updateCommand();
+
+			loadConfigurationMenu();
 		}
 
 
@@ -968,7 +974,7 @@ void blueToothConfigurationSystem()
 			eepromRW->eeprom_write_string(_addressApn, _bufApn);
 			_apn = splitString;
 			//}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("D098")) > -1)
@@ -983,7 +989,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(_addressDBPhoneIsON, _bufDbPhoneON);
 				_phoneNumbers = atoi(&_bufDbPhoneON[0]);
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("D099")) > -1)
@@ -998,7 +1004,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(_addressStartBufPhoneNumberAlternative, _bufPhoneNumberAlternative);
 				_phoneNumberAlternative = splitString;
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("D002")) > -1)
@@ -1012,7 +1018,7 @@ void blueToothConfigurationSystem()
 				_precision = atoi(&_bufPrecisionNumber[0]);
 				_sensitivityAlarm = 2000 + ((_precision) * 500);
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 		//if (_bluetoothData.indexOf(F("D003")) > -1)
@@ -1059,7 +1065,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(16, _bufTemperatureMax);
 				_tempMax = atoi(_bufTemperatureMax);
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("D005")) > -1)
@@ -1074,7 +1080,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(19, _bufPirSensorIsON);
 				_isPIRSensorActivated = atoi(&_bufPirSensorIsON[0]);
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 
@@ -1090,7 +1096,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(_addressStartDeviceAddress, _bufDeviceAddress);
 				_deviceAddress = splitString;
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("D011")) > -1)
@@ -1105,7 +1111,7 @@ void blueToothConfigurationSystem()
 				eepromRW->eeprom_write_string(_addressStartDeviceName, _bufDeviceName);
 				_deviceName = splitString;
 			}
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 
@@ -1136,7 +1142,7 @@ void blueToothConfigurationSystem()
 
 			}
 
-			updateCommand();
+			loadConfigurationMenu();
 		}
 
 #pragma endregion
@@ -1244,11 +1250,11 @@ void blueToothConfigurationSystem()
 	delete(eepromRW);
 }
 
-void updateCommand()
-{
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Updated"), BlueToothCommandsUtil::Message));
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
-}
+//void updateCommand()
+//{
+//	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Updated"), BlueToothCommandsUtil::Message));
+//	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
+//}
 
 boolean isValidNumber(String str)
 {
