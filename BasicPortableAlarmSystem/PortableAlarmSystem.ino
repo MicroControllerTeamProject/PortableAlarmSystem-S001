@@ -124,7 +124,7 @@ bool _isMasterMode = false;
 
 unsigned long timeToTurnOfBTAfterPowerOn = 300000;
 
-unsigned long _timeAfterPowerOnForBTFinder = 120000;
+unsigned long _timeAfterPowerOnForBTFinder = 300000;
 
 char version[15] = "-S001 v101";
 
