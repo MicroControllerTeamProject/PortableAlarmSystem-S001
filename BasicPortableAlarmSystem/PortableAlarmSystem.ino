@@ -122,7 +122,7 @@ unsigned long _millsStart = 0;
 
 bool _isMasterMode = false;
 
-unsigned long timeAfterPowerOn = 300000;
+unsigned long timeToTurnOfBTAfterPowerOn = 300000;
 
 unsigned long _timeAfterPowerOnForBTFinder = 120000;
 
@@ -430,8 +430,8 @@ String getSignalStrength()
 void turnOffBluetoohIfTimeIsOver()
 {
 	if (_findOutPhonesMode == 0
-		&& (millis() > timeAfterPowerOn) &&
-		btSerial->isBlueToothOn()
+		&& (millis() > timeToTurnOfBTAfterPowerOn) 
+		&&	btSerial->isBlueToothOn()
 		&& _isBTSleepON
 		)
 	{
@@ -642,7 +642,7 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	//delay(5000);
 	btSerial->ReceveMode();
 	btSerial->turnOnBlueTooth();
-	timeAfterPowerOn = millis() + 300000;
+	timeToTurnOfBTAfterPowerOn = millis() + 300000;
 	_timeAfterPowerOnForBTFinder = millis() + 120000;
 	_isMasterMode = false;
 
@@ -1523,7 +1523,6 @@ double getTemp(void)
 	// The returned temperature is in degrees Celsius.
 	return (t);
 }
-
 
 //unsigned int offSetTempValue(double externalTemperature)
 //{
