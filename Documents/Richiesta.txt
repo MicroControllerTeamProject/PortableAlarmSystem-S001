@@ -1,0 +1,7 @@
+Video
+https://www.youtube.com/watch?v=TWTw_BlXQR4
+
+Si tratta di un piccolo sistema che puo' funzionare in infinite combinazioni.
+La sua versione di base è  funziona da allarme telefonico per cose e persone, ma attualmente è fornito di 5 o 6 tools al contorno e puo' rilevare gas,smoke,impronte digitali,fiamme,NFC,rilevare la presenza di un cellulare tramite bluetooth etc,
+
+Monta onboard,per ora,un arduino nano e pertanto cambiando il software,cosa che puo' fare tranquillamente anche un' utente scaricandolo da sito,portable come un gioco LEGO puo' fare infinite cose.
