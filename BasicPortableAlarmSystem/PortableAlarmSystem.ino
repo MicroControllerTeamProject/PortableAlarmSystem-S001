@@ -19,7 +19,7 @@ ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
-ActivityManager* _delayForCallNumbers = new ActivityManager(600); 
+ActivityManager* _delayForDialCall = new ActivityManager(60); 
 
 ActivityManager* _delayForFindPhone = new ActivityManager(15); 
 
@@ -98,8 +98,6 @@ uint8_t _isBTSleepON = 1;
 uint8_t _phoneNumbers = 0;
 
 uint8_t _findOutPhonesMode = 0;
-
-uint8_t _callNumbers = 0;
 
 uint8_t _tempMax = 0;
 
@@ -313,104 +311,65 @@ void inizializeInterrupts()
 
 void callSim900(char isLongCaller)
 {
-	if (_isDisableCall) { return; }
-
-	if (_callNumbers > 1 && isLongCaller != '0')
+	if (_delayForDialCall->IsDelayTimeFinished(true))
 	{
-		return;
-	}
-	else
-	{
-		_callNumbers++;
-	}
+	
+		if (_isDisableCall) { return; }
 
-	/*if (_timeLastCall < millis())
-	{
-		_timeLastCall = millis() + 120000;
-	}
-	else
-	{
-		return;
-	}*/
+		//Clear buffer before call
+		mySim900->ReadIncomingChars2();
+	
+		String phoneNumber = _prefix + _phoneNumber;
+		String phoneNumberAlternative = _prefix + _phoneNumberAlternative;
+		char completePhoneNumber[14];
+		char completePhoneNumberAlternative[14];
+		phoneNumber.toCharArray(completePhoneNumber, 14);
+		phoneNumberAlternative.toCharArray(completePhoneNumberAlternative, 14);
 
-	//_callNumberManager++;
+		unsigned long callTime;
 
-	//Serial.println(_callNumberManager);
-
-	/*if (_callNumberManager >= 8 && _callNumberManager <= 25)
-	{
-		return;
-	}
-
-	if (_callNumberManager > 25)
-	{
-		_callNumberManager = 0;
-	}
-*/
-
-	String phoneNumber = _prefix + _phoneNumber;
-	String phoneNumberAlternative = _prefix + _phoneNumberAlternative;
-	char completePhoneNumber[14];
-	char completePhoneNumberAlternative[14];
-	phoneNumber.toCharArray(completePhoneNumber, 14);
-	phoneNumberAlternative.toCharArray(completePhoneNumberAlternative, 14);
-
-	unsigned long callTime;
-
-	switch (isLongCaller)
-	{
-	case '0':
-		callTime = 20000;
-		break;
-	case '1':
-		callTime = 40000;
-		break;
-	deafault:
-		callTime = 40000;
-		break;
-	}
-
-	mySim900->DialVoiceCall(completePhoneNumber);
-
-	//if (_isDBPhoneON == 2)
-	//{
-	//	delay(callTime);
-	//	mySim900->ATCommand("AT+CHUP");
-	//}
-
-	if (_phoneNumbers == 2)
-	{
-
-		delay(callTime);
-
-		mySim900->ATCommand("AT+CHUP");
-
-		delay(2000);
-
-		mySim900->DialVoiceCall(completePhoneNumberAlternative);
-
-		if (isLongCaller != 1)
+		switch (isLongCaller)
 		{
-			delay(callTime);
-			mySim900->ATCommand("AT+CHUP");
+		case '0':
+			callTime = 20000;
+			break;
+		case '1':
+			callTime = 40000;
+			break;
+		deafault:
+			callTime = 40000;
+			break;
 		}
-		//mySim900->ReadIncomingChars2();
 
+		mySim900->DialVoiceCall(completePhoneNumber);
+
+		if (_phoneNumbers == 2)
+		{
+
+			delay(callTime);
+
+			mySim900->ATCommand("AT+CHUP");
+
+			delay(2000);
+
+			mySim900->DialVoiceCall(completePhoneNumberAlternative);
+
+			if (isLongCaller != 1)
+			{
+				delay(callTime);
+				mySim900->ATCommand("AT+CHUP");
+			}
+			//mySim900->ReadIncomingChars2();
+
+		}
+
+		mySim900->ClearBuffer(2000);
+
+		if (_findOutPhonesMode == 0)
+		{
+			turnOnBlueToothAndSetTurnOffTimer();
+		}
 	}
-
-	mySim900->ClearBuffer(2000);
-
-	if (_findOutPhonesMode == 0)
-	{
-		turnOnBlueToothAndSetTurnOffTimer();
-	}
-
-	//Da eliminare se verificato che non serviva a nulla.
-	//else
-	//{
-	//	btSerial->ReceveMode();
-	//	_isMasterMode = false;
-	//}
 
 }
 
@@ -550,10 +509,10 @@ void loop()
 	}
 
 
-	if (_delayForCallNumbers->IsDelayTimeFinished(true))
-	{
-		_callNumbers = 0;
-	}
+	//if (_delayForCallNumbers->IsDelayTimeFinished(true))
+	//{
+	//	_callNumbers = 0;
+	//}
 
 	turnOffBluetoohIfTimeIsOver();
 
@@ -565,10 +524,10 @@ void loop()
 
 	pirSensorActivity();
 
-	if (_delayForSignalStrength->IsDelayTimeFinished(true))
+	/*if (_delayForSignalStrength->IsDelayTimeFinished(true))
 	{
 		_signalStrength = getSignalStrength();
-	}
+	}*/
 
 	isMotionDetect();
 
@@ -1355,7 +1314,7 @@ void readIncomingSMS()
 	if (mySim900->IsAvailable())
 	{
 		String response = mySim900->ReadIncomingChars2();
-		//Serial.println(response);
+		Serial.println(response);
 		response.trim();
 		//if (response.substring(0, 5) == F("+CMT:"))
 		if (response.indexOf("+CMT:") != -1)
