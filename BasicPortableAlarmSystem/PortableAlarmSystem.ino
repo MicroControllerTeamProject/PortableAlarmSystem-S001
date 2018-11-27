@@ -1378,7 +1378,7 @@ void getCoordinates()
 		mySim900->ReadIncomingChars2();
 	}
 
-	char * apnCommand = new char[100];
+	char * apnCommand = new char[50];
 
 	char * apnString = new char[25];
 
@@ -1389,6 +1389,7 @@ void getCoordinates()
 	strcat(apnCommand, apnString);
 
 	strcat(apnCommand, "\"");
+
 
 	//Serial.println(apnCommand);
 
@@ -1412,6 +1413,9 @@ void getCoordinates()
 		mySim900->ReadIncomingChars2();
 
 	}
+
+	
+
 	mySim900->ATCommand("AT + SAPBR = 0, 1");
 	delay(2000);
 	if (mySim900->IsAvailable() > 0)
