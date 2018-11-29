@@ -123,7 +123,7 @@ unsigned long timeToTurnOfBTAfterPowerOn = 300000;
 
 unsigned long _timeAfterPowerOnForBTFinder = 300000;
 
-char version[15] = "-S001 v101";
+char version[15] = "-S001 v3.1";
 
 String _apn = "";
 
@@ -1333,6 +1333,7 @@ void listOfSmsCommands(String command)
 	_timeLastCall = 0;
 	command.trim();
 
+	//Accende il sistema
 	if (command == F("Ac"))
 	{
 		_isDisableCall = false;
@@ -1340,14 +1341,14 @@ void listOfSmsCommands(String command)
 		callSim900('0');
 
 	}
-
+	//Spegne il sistema
 	if (command == F("Sp"))
 	{
 		callSim900('0');
 		_isDisableCall = true;
 
 	}
-
+	//Allarme ON
 	if (command == F("Ao"))
 	{
 		_isDisableCall = false;
@@ -1355,16 +1356,19 @@ void listOfSmsCommands(String command)
 		_isAlarmOn = true;
 
 	}
+	//Accende bluetooth
 	if (command == F("Ab"))
 	{
 		turnOnBlueToothAndSetTurnOffTimer();
 
 	}
-
+	//Spegne bluetooth
 	if (command == F("Sb"))
 	{
 		btSerial->turnOffBlueTooth();
+		callSim900('0');
 	}
+	//Coordinate geolocalizzazione.
 	if (command == F("Po"))
 	{
 		getCoordinates();
@@ -1373,10 +1377,7 @@ void listOfSmsCommands(String command)
 
 void getCoordinates()
 {
-	if (mySim900->IsAvailable() > 0)
-	{
-		mySim900->ReadIncomingChars2();
-	}
+	mySim900->ReadIncomingChars2();
 
 	char * apnCommand = new char[50];
 
