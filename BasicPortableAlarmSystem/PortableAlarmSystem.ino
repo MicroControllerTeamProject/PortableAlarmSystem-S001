@@ -603,18 +603,12 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	//Essenziale tutta la trafila di istruzioni altrimenti non si riattiva bluetooth
 	Serial.flush();
 	btSerial->Reset_To_Slave_Mode();
-	//delay(5000);
 	btSerial->ReceveMode();
 	btSerial->turnOnBlueTooth();
 	timeToTurnOfBTAfterPowerOn = millis() + 300000;
 	_timeAfterPowerOnForBTFinder = millis() + 120000;
 	_isMasterMode = false;
 
-
-	/*Serial.println("Accendo bluetooth : ");
-	Serial.print("timeAfterPowerOn : "); Serial.println(timeAfterPowerOn);
-	Serial.print("mills() : "); Serial.println(millis());*/
-	//delay(2000);
 }
 
 void blinkLed()
@@ -709,7 +703,6 @@ void loadMainMenu()
 
 	String(F("Temp.:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(internalTemperature), BlueToothCommandsUtil::Info));
-
 
 	/*btSerial->println(BlueToothCommandsUtil::CommandConstructor("Batt.value:" + String(_voltageValue), BlueToothCommandsUtil::Info));*/
 
