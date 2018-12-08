@@ -498,6 +498,11 @@ void loop()
 {
 	readIncomingSMS();
 
+	/*if (_delayForSignalStrength->IsDelayTimeFinished(true))
+	{
+		_signalStrength = getSignalStrength();
+	}*/
+
 	//if (_delayForCheckBlueToothWorking->IsDelayTimeFinished(true) && !_isBTSleepON && _isFindOutPhonesON == 0)
 	//{
 	//	restartBlueTooth();
@@ -524,10 +529,7 @@ void loop()
 
 	pirSensorActivity();
 
-	/*if (_delayForSignalStrength->IsDelayTimeFinished(true))
-	{
-		_signalStrength = getSignalStrength();
-	}*/
+	
 
 	isMotionDetect();
 
@@ -658,6 +660,7 @@ String calculateBatteryLevel(float batteryLevel)
 void loadMainMenu()
 {
 	char* alarmStatus = new char[15];
+
 	if (_isAlarmOn)
 	{
 		String(F("Alarm ON")).toCharArray(alarmStatus, 15);
