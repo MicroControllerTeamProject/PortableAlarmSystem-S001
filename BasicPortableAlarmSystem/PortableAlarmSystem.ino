@@ -21,7 +21,7 @@ ActivityManager* _delayForVoltage = new ActivityManager(60);
 
 ActivityManager* _delayForDialCall = new ActivityManager(60); 
 
-ActivityManager* _delayForFindPhone = new ActivityManager(15); 
+ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
 ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
@@ -496,7 +496,10 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 
 void loop()
 {
-	readIncomingSMS();
+	if (!(_isOnMotionDetect && _isAlarmOn))
+	{
+		readIncomingSMS();
+	}
 
 	/*if (_delayForSignalStrength->IsDelayTimeFinished(true))
 	{
@@ -507,34 +510,45 @@ void loop()
 	//{
 	//	restartBlueTooth();
 	//}
-
-	if (_delayForFindPhone->IsDelayTimeFinished(true))
+	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
-		isFindOutPhonesONAndSetBluetoothInMasterMode();
+		
+		if (_delayForFindPhone->IsDelayTimeFinished(true))
+		{
+			//Serial.println("Sto cercando");
+			isFindOutPhonesONAndSetBluetoothInMasterMode();
+		}
 	}
-
 
 	//if (_delayForCallNumbers->IsDelayTimeFinished(true))
 	//{
 	//	_callNumbers = 0;
 	//}
-
-	turnOffBluetoohIfTimeIsOver();
-
-	turnOnBlueToothIfMotionIsDetected();
-
-	internalTemperatureActivity();
-
-	voltageActivity();
-
-	pirSensorActivity();
-
-	
-
+	if (!(_isOnMotionDetect && _isAlarmOn))
+	{
+		turnOffBluetoohIfTimeIsOver();
+	}
+	if (!(_isOnMotionDetect && _isAlarmOn))
+	{
+		turnOnBlueToothIfMotionIsDetected();
+	}
+	if (!(_isOnMotionDetect && _isAlarmOn))
+	{
+		internalTemperatureActivity();
+	}
+	if (!(_isOnMotionDetect && _isAlarmOn))
+	{
+		voltageActivity();
+	}
+	if (!(_isOnMotionDetect && _isAlarmOn))
+	{
+		pirSensorActivity();
+	}
 	isMotionDetect();
-
-	blueToothConfigurationSystem();
-
+	if (!(_isOnMotionDetect && _isAlarmOn) )
+	{
+		blueToothConfigurationSystem();
+	}
 	//getCoordinates();
 }
 
@@ -550,6 +564,7 @@ void isMotionDetect()
 
 	if (_isOnMotionDetect && _isAlarmOn) //&& !isOnConfiguration)									 /*if(true)*/
 	{
+		//Serial.println("lampeggio");
 		blinkLed();
 
 		detachInterrupt(0);
