@@ -95,6 +95,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{20BCCE
 		Documents\images\Presentation\images\valigia.tif = Documents\images\Presentation\images\valigia.tif
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_library", "_library", "{02ED6CDB-0C8E-45BD-8EC5-ED7F59AE5B93}"
+	ProjectSection(SolutionItems) = preProject
+		..\Libraries\LSG_ActivityManager\ActivityManager.cpp = ..\Libraries\LSG_ActivityManager\ActivityManager.cpp
+		..\Libraries\LSG_ActivityManager\ActivityManager.h = ..\Libraries\LSG_ActivityManager\ActivityManager.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
