@@ -14,6 +14,8 @@
 //#include <StringFunctions.h>
 #include "MySim900.h"
 #include "ActivityManager.h"
+
+char version[15] = "-S001 v3.2";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -122,8 +124,6 @@ bool _isMasterMode = false;
 unsigned long timeToTurnOfBTAfterPowerOn = 300000;
 
 unsigned long _timeAfterPowerOnForBTFinder = 300000;
-
-char version[15] = "-S001 v3.1";
 
 String _apn = "";
 
