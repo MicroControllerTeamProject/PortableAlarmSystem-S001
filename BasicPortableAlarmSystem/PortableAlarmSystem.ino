@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v3.2";
+char version[15] = "-S001 v3.3";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -371,10 +371,16 @@ void callSim900(char isLongCaller)
 		}
 	}
 
+		
+
+
+
+
 }
 
 void motionTiltInterrupt()
 {
+
 	_isOnMotionDetect = true;
 }
 
@@ -510,9 +516,9 @@ void loop()
 	//{
 	//	restartBlueTooth();
 	//}
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
-		
 		if (_delayForFindPhone->IsDelayTimeFinished(true))
 		{
 			//Serial.println("Sto cercando");
@@ -554,7 +560,9 @@ void loop()
 
 void isMotionDetect()
 {
-	if (_isDisableCall) { return; }
+	if (_isDisableCall) { 
+		readIncomingSMS();
+		return; }
 
 	if ((millis() - _millsStart) > _sensitivityAlarm)
 	{
@@ -594,6 +602,12 @@ void isMotionDetect()
 				turnOnBlueToothAndSetTurnOffTimer();
 			}
 			//}
+
+			mySim900->ReadIncomingChars2();
+
+			isFindOutPhonesONAndSetBluetoothInMasterMode();
+
+			//readIncomingSMS();
 		}
 		else
 		{
@@ -1350,7 +1364,6 @@ void listOfSmsCommands(String command)
 		_isDisableCall = false;
 		_isMasterMode = false;
 		callSim900('0');
-
 	}
 	//Spegne il sistema
 	if (command == F("Sp"))
