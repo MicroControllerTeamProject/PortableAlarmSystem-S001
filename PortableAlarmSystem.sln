@@ -99,6 +99,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_library", "_library", "{02
 	ProjectSection(SolutionItems) = preProject
 		..\Libraries\LSG_ActivityManager\ActivityManager.cpp = ..\Libraries\LSG_ActivityManager\ActivityManager.cpp
 		..\Libraries\LSG_ActivityManager\ActivityManager.h = ..\Libraries\LSG_ActivityManager\ActivityManager.h
+		..\Libraries\MyBlueTooth\MyBlueTooth.cpp = ..\Libraries\MyBlueTooth\MyBlueTooth.cpp
+		..\Libraries\MyBlueTooth\MyBlueTooth.h = ..\Libraries\MyBlueTooth\MyBlueTooth.h
 	EndProjectSection
 EndProject
 Global

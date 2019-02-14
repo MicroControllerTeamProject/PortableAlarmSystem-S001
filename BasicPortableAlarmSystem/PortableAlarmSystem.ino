@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v3.2";
+char version[15] = "-S001 v3.3";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -365,16 +365,22 @@ void callSim900(char isLongCaller)
 
 		mySim900->ClearBuffer(2000);
 
-		if (_findOutPhonesMode == 0)
+		if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
 		{
 			turnOnBlueToothAndSetTurnOffTimer();
 		}
 	}
 
+		
+
+
+
+
 }
 
 void motionTiltInterrupt()
 {
+
 	_isOnMotionDetect = true;
 }
 
@@ -510,9 +516,9 @@ void loop()
 	//{
 	//	restartBlueTooth();
 	//}
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
-		
 		if (_delayForFindPhone->IsDelayTimeFinished(true))
 		{
 			//Serial.println("Sto cercando");
@@ -554,7 +560,9 @@ void loop()
 
 void isMotionDetect()
 {
-	if (_isDisableCall) { return; }
+	if (_isDisableCall) { 
+		readIncomingSMS();
+		return; }
 
 	if ((millis() - _millsStart) > _sensitivityAlarm)
 	{
@@ -594,6 +602,8 @@ void isMotionDetect()
 				turnOnBlueToothAndSetTurnOffTimer();
 			}
 			//}
+
+				isFindOutPhonesONAndSetBluetoothInMasterMode();
 		}
 		else
 		{
@@ -622,8 +632,11 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	btSerial->Reset_To_Slave_Mode();
 	btSerial->ReceveMode();
 	btSerial->turnOnBlueTooth();
-	timeToTurnOfBTAfterPowerOn = millis() + 300000;
-	_timeAfterPowerOnForBTFinder = millis() + 120000;
+	if (_findOutPhonesMode != 1)
+	{
+		timeToTurnOfBTAfterPowerOn = millis() + 300000;
+		_timeAfterPowerOnForBTFinder = millis() + 120000;
+	}
 	_isMasterMode = false;
 
 }
@@ -1350,7 +1363,6 @@ void listOfSmsCommands(String command)
 		_isDisableCall = false;
 		_isMasterMode = false;
 		callSim900('0');
-
 	}
 	//Spegne il sistema
 	if (command == F("Sp"))
