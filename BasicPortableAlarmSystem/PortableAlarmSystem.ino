@@ -365,7 +365,7 @@ void callSim900(char isLongCaller)
 
 		mySim900->ClearBuffer(2000);
 
-		if (_findOutPhonesMode == 0)
+		if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
 		{
 			turnOnBlueToothAndSetTurnOffTimer();
 		}
@@ -603,11 +603,7 @@ void isMotionDetect()
 			}
 			//}
 
-			mySim900->ReadIncomingChars2();
-
-			isFindOutPhonesONAndSetBluetoothInMasterMode();
-
-			//readIncomingSMS();
+				isFindOutPhonesONAndSetBluetoothInMasterMode();
 		}
 		else
 		{
@@ -636,8 +632,11 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	btSerial->Reset_To_Slave_Mode();
 	btSerial->ReceveMode();
 	btSerial->turnOnBlueTooth();
-	timeToTurnOfBTAfterPowerOn = millis() + 300000;
-	_timeAfterPowerOnForBTFinder = millis() + 120000;
+	if (_findOutPhonesMode != 1)
+	{
+		timeToTurnOfBTAfterPowerOn = millis() + 300000;
+		_timeAfterPowerOnForBTFinder = millis() + 120000;
+	}
 	_isMasterMode = false;
 
 }
