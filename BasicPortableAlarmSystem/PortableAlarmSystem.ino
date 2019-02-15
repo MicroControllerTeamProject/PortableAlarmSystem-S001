@@ -15,13 +15,13 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v3.3";
+char version[15] = "-S001 v4.5";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
-ActivityManager* _delayForDialCall = new ActivityManager(60); 
+ActivityManager* _delayForDialCall = new ActivityManager(1); 
 
 ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
