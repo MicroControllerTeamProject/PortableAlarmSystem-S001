@@ -15,13 +15,13 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v3.3";
+char version[15] = "-S001 v4.5";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
-ActivityManager* _delayForDialCall = new ActivityManager(60); 
+ActivityManager* _delayForDialCall = new ActivityManager(1); 
 
 ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
@@ -214,7 +214,29 @@ void setup()
 	_whatIsHappened = F("X");
 
 	//Stare attenti perche' richiede un ritardo che ora è dato da creazione oggetti bluetooth.
-	mySim900->WaitSMSComing();
+	//mySim900->WaitSMSComing();
+
+
+	mySim900->ATCommand("AT+CPMS=\"SM\"");
+	//delay(5000);
+	/*if (mySim900->IsAvailable() > 0)
+	{
+		String s = mySim900->ReadIncomingChars2();
+		Serial.println(s);
+	}*/
+	mySim900->ATCommand("AT+CMGF=1");
+	/*delay(5000);
+	if (mySim900->IsAvailable() > 0)
+	{
+		String s = mySim900->ReadIncomingChars2();
+		Serial.println(s);
+	}*/
+	mySim900->ATCommand("AT+CMGD=1,4");
+	/*if (mySim900->IsAvailable() > 0)
+	{
+		String s = mySim900->ReadIncomingChars2();
+		Serial.println(s);
+	}*/
 
 	blinkLed();
 }
@@ -331,7 +353,7 @@ void callSim900(char isLongCaller)
 		switch (isLongCaller)
 		{
 		case '0':
-			callTime = 20000;
+			callTime = 30000;
 			break;
 		case '1':
 			callTime = 40000;
@@ -603,7 +625,11 @@ void isMotionDetect()
 			}
 			//}
 
+				readIncomingSMS();
+
 				isFindOutPhonesONAndSetBluetoothInMasterMode();
+
+				
 		}
 		else
 		{
@@ -638,7 +664,6 @@ void turnOnBlueToothAndSetTurnOffTimer()
 		_timeAfterPowerOnForBTFinder = millis() + 120000;
 	}
 	_isMasterMode = false;
-
 }
 
 void blinkLed()
@@ -1335,18 +1360,25 @@ void voltageActivity()
 
 void readIncomingSMS()
 {
-	if (mySim900->IsAvailable())
+	mySim900->ATCommand("AT+CMGL=\"REC UNREAD\"");
+	//mySim900->ATCommand("AT+CMGR=1");
+	delay(100);
+	/**/
+
+	if (mySim900->IsAvailable() > 0)
 	{
 		String response = mySim900->ReadIncomingChars2();
 		//Serial.println(response);
 		response.trim();
 		//if (response.substring(0, 5) == F("+CMT:"))
-		if (response.indexOf("+CMT:") != -1)
+		//if (response.indexOf("+CMT:") != -1)
+		if (response.indexOf("+CMGL:") != -1)
 		{
 			blinkLed();
 			int index = response.lastIndexOf('"');
-			String smsCommand = response.substring(index + 1, response.length());
+			String smsCommand = response.substring(index + 1, index + 5);
 			smsCommand.trim();
+			//Serial.println(smsCommand);
 			listOfSmsCommands(smsCommand);
 		}
 	}
@@ -1367,6 +1399,7 @@ void listOfSmsCommands(String command)
 	//Spegne il sistema
 	if (command == F("Sp"))
 	{
+		//Serial.println("Disabilito chiamate");
 		callSim900('0');
 		_isDisableCall = true;
 
@@ -1376,6 +1409,10 @@ void listOfSmsCommands(String command)
 	{
 		_isDisableCall = false;
 		callSim900('0');
+		if (_findOutPhonesMode == 1)
+		{
+			_timeAfterPowerOnForBTFinder = 0;
+		}
 		_isAlarmOn = true;
 
 	}
