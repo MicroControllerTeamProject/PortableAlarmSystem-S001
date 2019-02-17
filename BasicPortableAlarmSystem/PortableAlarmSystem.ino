@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v4.7";
+char version[15] = "-S001 v4.8";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -539,7 +539,7 @@ void loop()
 	//	restartBlueTooth();
 	//}
 
-	if (!(_isOnMotionDetect && _isAlarmOn))
+	if ((!(_isOnMotionDetect && _isAlarmOn)) || _findOutPhonesMode == 2)
 	{
 		if (_delayForFindPhone->IsDelayTimeFinished(true))
 		{
@@ -582,7 +582,7 @@ void loop()
 
 void isMotionDetect()
 {
-	if (_isDisableCall) { 
+	if (_isDisableCall || _findOutPhonesMode == 2) { 
 		readIncomingSMS();
 		return; }
 
