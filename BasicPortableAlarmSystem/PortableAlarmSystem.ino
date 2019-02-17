@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v4.5";
+char version[15] = "-S001 v4.6";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -387,10 +387,10 @@ void callSim900(char isLongCaller)
 
 		mySim900->ClearBuffer(2000);
 
-		if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
-		{
+		/*if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
+		{*/
 			turnOnBlueToothAndSetTurnOffTimer();
-		}
+		//}
 	}
 
 		
@@ -656,9 +656,11 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	//Essenziale tutta la trafila di istruzioni altrimenti non si riattiva bluetooth
 	Serial.flush();
 	btSerial->Reset_To_Slave_Mode();
-	btSerial->ReceveMode();
-	btSerial->turnOnBlueTooth();
-	if (_findOutPhonesMode != 1)
+	/*btSerial->Reset_To_Slave_Mode();
+	btSerial->ReceveMode();*/
+	//btSerial->ReceveMode();
+	//btSerial->turnOnBlueTooth();
+	if (_findOutPhonesMode == 0)
 	{
 		timeToTurnOfBTAfterPowerOn = millis() + 300000;
 		_timeAfterPowerOnForBTFinder = millis() + 120000;
