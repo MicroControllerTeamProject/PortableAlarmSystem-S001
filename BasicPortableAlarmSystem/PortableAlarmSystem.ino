@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v4.6";
+char version[15] = "-S001 v4.7";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
