@@ -656,12 +656,12 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	//Essenziale tutta la trafila di istruzioni altrimenti non si riattiva bluetooth
 	Serial.flush();
 	btSerial->Reset_To_Slave_Mode();
-	/*btSerial->Reset_To_Slave_Mode();
-	btSerial->ReceveMode();*/
 	//btSerial->ReceveMode();
 	//btSerial->turnOnBlueTooth();
 	if (_findOutPhonesMode == 0)
 	{
+		btSerial->ReceveMode();
+		btSerial->turnOnBlueTooth();
 		timeToTurnOfBTAfterPowerOn = millis() + 300000;
 		_timeAfterPowerOnForBTFinder = millis() + 120000;
 	}
