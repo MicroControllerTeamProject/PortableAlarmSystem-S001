@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-S001 v4.8";
+char version[15] = "-S001 v5.0";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -389,7 +389,7 @@ void callSim900(char isLongCaller)
 
 		/*if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
 		{*/
-			turnOnBlueToothAndSetTurnOffTimer();
+			turnOnBlueToothAndSetTurnOffTimer(false);
 		//}
 	}
 
@@ -441,7 +441,7 @@ void turnOnBlueToothIfMotionIsDetected()
 		)
 	{
 		_isOnMotionDetect = false;
-		turnOnBlueToothAndSetTurnOffTimer();
+		turnOnBlueToothAndSetTurnOffTimer(false);
 	}
 }
 
@@ -621,7 +621,7 @@ void isMotionDetect()
 			if (btSerial->isBlueToothOff() && _findOutPhonesMode == 0)
 			{
 				delay(30000);
-				turnOnBlueToothAndSetTurnOffTimer();
+				turnOnBlueToothAndSetTurnOffTimer(false);
 			}
 			//}
 
@@ -650,7 +650,7 @@ void isMotionDetect()
 //	btSerial->ReceveMode();
 //}
 
-void turnOnBlueToothAndSetTurnOffTimer()
+void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
 {
 	//TODO: Fare metodo su mybluetooth per riattivarlo.
 	//Essenziale tutta la trafila di istruzioni altrimenti non si riattiva bluetooth
@@ -658,7 +658,7 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	btSerial->Reset_To_Slave_Mode();
 	//btSerial->ReceveMode();
 	//btSerial->turnOnBlueTooth();
-	if (_findOutPhonesMode == 0)
+	if (_findOutPhonesMode == 0 || isFromSMS)
 	{
 		btSerial->ReceveMode();
 		btSerial->turnOnBlueTooth();
@@ -1411,7 +1411,7 @@ void listOfSmsCommands(String command)
 	{
 		_isDisableCall = false;
 		callSim900('0');
-		if (_findOutPhonesMode == 1)
+		if (_findOutPhonesMode == 1 || _findOutPhonesMode == 2)
 		{
 			_timeAfterPowerOnForBTFinder = 0;
 		}
@@ -1421,8 +1421,7 @@ void listOfSmsCommands(String command)
 	//Accende bluetooth
 	if (command == F("Ab"))
 	{
-		turnOnBlueToothAndSetTurnOffTimer();
-
+		turnOnBlueToothAndSetTurnOffTimer(true);
 	}
 	//Spegne bluetooth
 	if (command == F("Sb"))
