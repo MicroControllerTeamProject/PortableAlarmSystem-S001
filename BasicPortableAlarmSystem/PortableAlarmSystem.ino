@@ -802,7 +802,7 @@ void loadConfigurationMenu()
 	String(F("Apn:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
 
-	if (!_isPIRSensorActivated && _findOutPhonesMode != 2)
+	if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
 	{
 		String(F("Prec.:")).toCharArray(commandString, 15);
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
@@ -813,7 +813,7 @@ void loadConfigurationMenu()
 
 
 
-	if (_findOutPhonesMode == 0)
+	if (_findOutPhonesMode != 2)
 	{
 		String(F("PIR status:")).toCharArray(commandString, 15);
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
