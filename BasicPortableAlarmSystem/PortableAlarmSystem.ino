@@ -21,7 +21,7 @@ ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
-ActivityManager* _delayForDialCall = new ActivityManager(1); 
+//ActivityManager* _delayForDialCall = new ActivityManager(1); 
 
 ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
@@ -333,8 +333,8 @@ void inizializeInterrupts()
 
 void callSim900(char isLongCaller)
 {
-	if (_delayForDialCall->IsDelayTimeFinished(true))
-	{
+	/*if (_delayForDialCall->IsDelayTimeFinished(true))
+	{*/
 	
 		if (_isDisableCall) { return; }
 
@@ -391,7 +391,7 @@ void callSim900(char isLongCaller)
 		{*/
 			turnOnBlueToothAndSetTurnOffTimer(false);
 		//}
-	}
+	//}
 
 		
 
@@ -802,7 +802,7 @@ void loadConfigurationMenu()
 	String(F("Apn:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
 
-	if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
+	if (!_isPIRSensorActivated && _findOutPhonesMode != 2)
 	{
 		String(F("Prec.:")).toCharArray(commandString, 15);
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
