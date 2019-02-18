@@ -1378,7 +1378,7 @@ void readIncomingSMS()
 		{
 			blinkLed();
 			int index = response.lastIndexOf('"');
-			String smsCommand = response.substring(index + 1, index + 5);
+			String smsCommand = response.substring(index + 1, index + 7);
 			smsCommand.trim();
 			//Serial.println(smsCommand);
 			listOfSmsCommands(smsCommand);
