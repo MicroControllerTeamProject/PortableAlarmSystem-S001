@@ -1532,7 +1532,12 @@ void getCoordinates()
 			}
 		}
 
+		
+
 	}
+	//Resetta la sim dopo SAPBR 1,1
+	delay(10000);
+	mySim900->ATCommand("AT + SAPBR = 0, 1");
 }
 
 double getTemp(void)
