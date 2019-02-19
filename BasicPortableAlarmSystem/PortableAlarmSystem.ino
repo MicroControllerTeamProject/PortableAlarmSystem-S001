@@ -15,6 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
+
 char version[15] = "-S001 v5.0";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
@@ -179,7 +180,6 @@ unsigned long _timeLastCall = 0;
 
 void setup()
 {
-
 	mySim900 = new MySim900(_pin_rxSIM900, _pin_txSIM900, false);
 
 	mySim900->Begin(19200);
@@ -1362,7 +1362,7 @@ void voltageActivity()
 
 void readIncomingSMS()
 {
-	mySim900->ATCommand("AT+CMGL=\"REC UNREAD\"");
+	mySim900->ATCommand("AT+CMGL");//=\"REC UNREAD\"");
 	//mySim900->ATCommand("AT+CMGR=1");
 	delay(100);
 	/**/
@@ -1469,58 +1469,64 @@ void getCoordinates()
 	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"ibox.tim.it\"");*/
 
 	delay(1500);
-	if (mySim900->IsAvailable() > 0)
-	{
-		/*Serial.println(mySim900->ReadIncomingChars2());*/
-		mySim900->ReadIncomingChars2();
+	//if (mySim900->IsAvailable() > 0)
+	//{
+	//	/*Serial.println(mySim900->ReadIncomingChars2());*/
+	//	mySim900->ReadIncomingChars2();
 
-	}
+	//}
 
 	
 
 	mySim900->ATCommand("AT + SAPBR = 0, 1");
 	delay(2000);
-	if (mySim900->IsAvailable() > 0)
-	{
-		//Serial.println(mySim900->ReadIncomingChars2());
-		mySim900->ReadIncomingChars2();
+	//if (mySim900->IsAvailable() > 0)
+	//{
+	//	//Serial.println(mySim900->ReadIncomingChars2());
+	//	mySim900->ReadIncomingChars2();
 
-	}
+	//}
 	mySim900->ATCommand("AT + SAPBR = 1, 1");
 	delay(2000);
-	if (mySim900->IsAvailable() > 0)
-	{
-		//Serial.println(mySim900->ReadIncomingChars2());
-		mySim900->ReadIncomingChars2();
+	//if (mySim900->IsAvailable() > 0)
+	//{
+	//	//Serial.println(mySim900->ReadIncomingChars2());
+	//	mySim900->ReadIncomingChars2();
 
-	}
+	//}
 	mySim900->ATCommand("AT + SAPBR = 2, 1");
 	delay(1500);
-	if (mySim900->IsAvailable() > 0)
-	{
-		//Serial.println(mySim900->ReadIncomingChars2());
-		mySim900->ReadIncomingChars2();
+	//if (mySim900->IsAvailable() > 0)
+	//{
+	//	//Serial.println(mySim900->ReadIncomingChars2());
+	//	mySim900->ReadIncomingChars2();
 
-	}
+	//}
+	mySim900->ReadIncomingChars2();
 	mySim900->ATCommand("AT + CIPGSMLOC = 1, 1");
 	delay(10000);
 	if (mySim900->IsAvailable() > 0)
 	{
 		String h = mySim900->ReadIncomingChars2();
 		h.trim();
+		/*Serial.println(h);*/
 		/*Serial.println(h);
 		Serial.println(h.indexOf(F("+CIPGSMLOC:")));
 		Serial.println(h.substring(24, 35));*/
 
 		if (h.substring(24, 35) == F("+CIPGSMLOC:"))
 		{
+			/*Serial.println("Entrato");*/
 			String a = splitStringIndex(h, ',', 3);
 			String b = splitStringIndex(h, ',', 2);
-			String site = F("www.google.com/maps/search/?api=1&query=");
-			site = site + a + "," + b;
+			//String c = F(",");
 			a.trim(); b.trim();
-			//Serial.println(site);
-			if (a != "" && b != "")
+			String site = F("google.com/maps/search/?api=1&query=");
+			site = site + a + F(","); //+ F(",") + b;
+			//site = site + c;
+			site = site + b;
+			/*Serial.println(site);*/
+			if (a != F("") && b != F(""))
 			{
 				mySim900->SendTextMessageSimple(site, _prefix + _phoneNumber);
 			}
