@@ -582,8 +582,8 @@ void loop()
 
 void isMotionDetect()
 {
-	if (_isDisableCall || _findOutPhonesMode == 2) { 
-		readIncomingSMS();
+	if (_isDisableCall || _findOutPhonesMode == 2 || _isPIRSensorActivated) { 
+		//readIncomingSMS();
 		return; }
 
 	if ((millis() - _millsStart) > _sensitivityAlarm)
