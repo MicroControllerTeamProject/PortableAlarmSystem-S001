@@ -524,6 +524,7 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 
 void loop()
 {
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		readIncomingSMS();
@@ -832,11 +833,9 @@ void loadConfigurationMenu()
 
 	}
 
-	if (!_isPIRSensorActivated)
-	{
-		String(F("Find phone:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
-	}
+	String(F("Find phone:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
+	
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	delete(commandString);
@@ -869,8 +868,8 @@ void blueToothConfigurationSystem()
 			_isOnMotionDetect = false;
 			_timeAfterPowerOnForBTFinder = 0;
 			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm ON"), BlueToothCommandsUtil::Title));
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm ON"), BlueToothCommandsUtil::Message));
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
+		/*	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm ON"), BlueToothCommandsUtil::Message));
+			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));*/
 			loadMainMenu();
 		}
 
@@ -881,8 +880,8 @@ void blueToothConfigurationSystem()
 
 			//digitalWrite(_pin_powerLed, LOW);
 			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm OFF"), BlueToothCommandsUtil::Title));
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm OFF"), BlueToothCommandsUtil::Message));
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
+		/*	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm OFF"), BlueToothCommandsUtil::Message));
+			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));*/
 			loadMainMenu();
 		}
 #pragma endregion
@@ -1138,6 +1137,10 @@ void blueToothConfigurationSystem()
 				if (_findOutPhonesMode != 0)
 				{
 					_isBTSleepON = 0;
+					if (_findOutPhonesMode == 2)
+					{
+						_isPIRSensorActivated = 0;
+					}
 				}
 				else
 				{
