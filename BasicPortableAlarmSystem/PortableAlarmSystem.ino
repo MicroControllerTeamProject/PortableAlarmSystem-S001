@@ -16,7 +16,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "-S001 v5.0";
+char version[15] = "-S001 v5.1";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -522,8 +522,25 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 	}
 }
 
+//Test used only for test tilt sensor.
+//void testForTiltSensor()
+//{
+//	Serial.print("digitalRead = "); Serial.print(digitalRead(2));
+//	Serial.print("--pinPowerBluetooth = "); Serial.print(digitalRead(6));
+//	Serial.print("--_isOnMotionDetect = "); Serial.println(_isOnMotionDetect);
+//
+//	if (_isOnMotionDetect == true) {
+//		_isOnMotionDetect = false;
+//		Serial.println("Eccezione rilevata");
+//		//delay(1000000000);
+//	}
+//	delay(1000);
+//}
+
 void loop()
 {
+	//testForTiltSensor()
+	//return;
 
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
@@ -771,8 +788,8 @@ void loadMainMenu()
 	String(F("WhatzUp:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _whatIsHappened, BlueToothCommandsUtil::Info));
 
-	String(F("Signal:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _signalStrength, BlueToothCommandsUtil::Info));
+	/*String(F("Signal:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _signalStrength, BlueToothCommandsUtil::Info));*/
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	btSerial->Flush();
