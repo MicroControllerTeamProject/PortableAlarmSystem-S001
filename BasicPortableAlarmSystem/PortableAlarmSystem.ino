@@ -16,7 +16,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "-S001 v5.1";
+char version[15] = "-S001 1.0-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -328,8 +328,11 @@ void inizializePins()
 
 void inizializeInterrupts()
 {
-	attachInterrupt(0, motionTiltInterrupt, RISING);
+	attachInterrupt(0, motionTiltInternalInterrupt, RISING);
+	attachInterrupt(1, motionTiltExternalInterrupt, RISING);
 }
+
+
 
 void callSim900(char isLongCaller)
 {
@@ -393,14 +396,13 @@ void callSim900(char isLongCaller)
 		//}
 	//}
 
-		
-
-
-
-
 }
 
-void motionTiltInterrupt()
+void motionTiltExternalInterrupt(){
+	_isOnMotionDetect = true;
+}
+
+void motionTiltInternalInterrupt()
 {
 
 	_isOnMotionDetect = true;
@@ -656,7 +658,7 @@ void isMotionDetect()
 		}
 		EIFR = 0x01;
 
-		attachInterrupt(0, motionTiltInterrupt, RISING);
+		attachInterrupt(0, motionTiltInternalInterrupt, RISING);
 
 		_isOnMotionDetect = false;
 	}
