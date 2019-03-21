@@ -72,6 +72,9 @@ const byte _addressOffSetTemperature = 92;
 
 const byte _addressDelayFindMe = 94;
 
+const byte _addressExternalInterruptIsOn = 96;
+
+
 uint8_t _isPIRSensorActivated = 0;
 
 bool _isDisableCall = false;
@@ -97,6 +100,8 @@ String _whatIsHappened = "";
 //uint8_t _isTemperatureCheckOn = 0;
 
 uint8_t _isBTSleepON = 1;
+
+uint8_t _isExternalInterruptOn = 0;
 
 uint8_t _phoneNumbers = 0;
 
@@ -174,6 +179,10 @@ char _bufOffSetTemperature[BUFSIZEOFFSETTEMPERATURE];
 
 const int BUFSIZEDELAYFINDME = 2;
 char _bufDelayFindMe[BUFSIZEDELAYFINDME];
+
+const int BUFSIZEEXTERNALINTERRUPTISON = 2;
+char _bufExternalInterruptIsON[BUFSIZEEXTERNALINTERRUPTISON];
+
 
 unsigned long _timeLastCall = 0;
 
@@ -316,6 +325,10 @@ void initilizeEEPromData()
 
 	_delayFindMe = atoi(_bufDelayFindMe);
 
+	eepromRW->eeprom_read_string(_addressExternalInterruptIsOn, _bufExternalInterruptIsON, BUFSIZEEXTERNALINTERRUPTISON);
+
+	_isExternalInterruptOn = atoi(&_bufExternalInterruptIsON[0]);
+
 
 	delete(eepromRW);
 
@@ -399,12 +412,13 @@ void callSim900(char isLongCaller)
 }
 
 void motionTiltExternalInterrupt(){
-	_isOnMotionDetect = true;
+	if (_isExternalInterruptOn) { 
+		_isOnMotionDetect = true; 
+	}
 }
 
 void motionTiltInternalInterrupt()
 {
-
 	_isOnMotionDetect = true;
 }
 
@@ -612,7 +626,7 @@ void isMotionDetect()
 		_isFirstTilt = true;
 	}
 
-	if (_isOnMotionDetect && _isAlarmOn) //&& !isOnConfiguration)									 /*if(true)*/
+	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn &&_isExternalInterruptOn && !digitalRead(3))) //&& !isOnConfiguration)									 /*if(true)*/
 	{
 		//Serial.println("lampeggio");
 		blinkLed();
@@ -855,6 +869,10 @@ void loadConfigurationMenu()
 	String(F("Find phone:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
 	
+	String(F("Ext.Int:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isExternalInterruptOn), BlueToothCommandsUtil::Data, F("013")));
+
+
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	delete(commandString);
@@ -940,7 +958,6 @@ void blueToothConfigurationSystem()
 			loadConfigurationMenu();
 		}
 
-
 		//if (_bluetoothData.indexOf(F("D097")) > -1)
 		//{
 		//	String splitString = splitStringIndex(_bluetoothData, ';', 1);
@@ -958,7 +975,6 @@ void blueToothConfigurationSystem()
 		//	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));*/
 		//}
 
-
 		if (_bluetoothData.indexOf(F("D094")) > -1)
 		{
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
@@ -974,7 +990,6 @@ void blueToothConfigurationSystem()
 			loadConfigurationMenu();
 		}
 
-
 		if (_bluetoothData.indexOf(F("D095")) > -1)
 		{
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
@@ -987,7 +1002,6 @@ void blueToothConfigurationSystem()
 
 			loadConfigurationMenu();
 		}
-
 
 		if (_bluetoothData.indexOf(F("D096")) > -1)
 		{
@@ -1100,16 +1114,14 @@ void blueToothConfigurationSystem()
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
 			if (isValidNumber(splitString))
 			{
-				const int BUFSIZEPIRSENSORISON = 2;
-				char _bufPirSensorIsON[BUFSIZEPIRSENSORISON];
-
+			/*	const int BUFSIZEPIRSENSORISON = 2;
+				char _bufPirSensorIsON[BUFSIZEPIRSENSORISON];*/
 				splitString.toCharArray(_bufPirSensorIsON, BUFSIZEPIRSENSORISON);
 				eepromRW->eeprom_write_string(19, _bufPirSensorIsON);
 				_isPIRSensorActivated = atoi(&_bufPirSensorIsON[0]);
 			}
 			loadConfigurationMenu();
 		}
-
 
 		if (_bluetoothData.indexOf(F("D010")) > -1)
 		{
@@ -1140,7 +1152,6 @@ void blueToothConfigurationSystem()
 			}
 			loadConfigurationMenu();
 		}
-
 
 		if (_bluetoothData.indexOf(F("D012")) > -1)
 		{
@@ -1173,6 +1184,18 @@ void blueToothConfigurationSystem()
 
 			}
 
+			loadConfigurationMenu();
+		}
+
+		if (_bluetoothData.indexOf(F("D013")) > -1)
+		{
+			String splitString = splitStringIndex(_bluetoothData, ';', 1);
+			if (isValidNumber(splitString))
+			{
+				splitString.toCharArray(_bufExternalInterruptIsON, BUFSIZEEXTERNALINTERRUPTISON);
+				eepromRW->eeprom_write_string(_addressExternalInterruptIsOn, _bufExternalInterruptIsON);
+				_isExternalInterruptOn= atoi(&_bufExternalInterruptIsON[0]);
+			}
 			loadConfigurationMenu();
 		}
 
