@@ -412,14 +412,16 @@ void callSim900(char isLongCaller)
 }
 
 void motionTiltExternalInterrupt(){
-	if (_isExternalInterruptOn) { 
+	if (_isExternalInterruptOn && !_isPIRSensorActivated) { 
 		_isOnMotionDetect = true; 
 	}
 }
 
 void motionTiltInternalInterrupt()
 {
-	_isOnMotionDetect = true;
+	if (!_isPIRSensorActivated) {
+		_isOnMotionDetect = true;
+	}
 }
 
 String getSignalStrength()
@@ -619,7 +621,6 @@ void isMotionDetect()
 	if (_isDisableCall || _findOutPhonesMode == 2 || _isPIRSensorActivated) { 
 		//readIncomingSMS();
 		return; }
-
 	if ((millis() - _millsStart) > _sensitivityAlarm)
 	{
 		_millsStart = 0;
