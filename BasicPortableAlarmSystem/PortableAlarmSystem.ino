@@ -16,7 +16,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "-S001 1.0-beta";
+char version[15] = "-S001 1.1-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
