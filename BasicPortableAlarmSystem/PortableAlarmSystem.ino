@@ -26,7 +26,7 @@ ActivityManager* _delayForVoltage = new ActivityManager(60);
 
 ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
-ActivityManager* _delayForSignalStrength = new ActivityManager(30);
+//ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
 MyBlueTooth* btSerial;
 
