@@ -15,7 +15,6 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-
 char version[15] = "-S001 1.1-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
@@ -183,9 +182,7 @@ char _bufDelayFindMe[BUFSIZEDELAYFINDME];
 const int BUFSIZEEXTERNALINTERRUPTISON = 2;
 char _bufExternalInterruptIsON[BUFSIZEEXTERNALINTERRUPTISON];
 
-
 unsigned long _timeLastCall = 0;
-
 
 void setup()
 {
@@ -345,8 +342,6 @@ void inizializeInterrupts()
 	attachInterrupt(1, motionTiltExternalInterrupt, RISING);
 }
 
-
-
 void callSim900(char isLongCaller)
 {
 	/*if (_delayForDialCall->IsDelayTimeFinished(true))
@@ -412,16 +407,16 @@ void callSim900(char isLongCaller)
 }
 
 void motionTiltExternalInterrupt(){
-	if (_isExternalInterruptOn && !_isPIRSensorActivated) { 
+	if (_isExternalInterruptOn /*&& !_isPIRSensorActivated*/) { 
 		_isOnMotionDetect = true; 
 	}
 }
 
 void motionTiltInternalInterrupt()
 {
-	if (!_isPIRSensorActivated) {
+	/*if (!_isPIRSensorActivated) {*/
 		_isOnMotionDetect = true;
-	}
+	//}
 }
 
 String getSignalStrength()
@@ -439,13 +434,9 @@ void turnOffBluetoohIfTimeIsOver()
 		&& _isBTSleepON
 		)
 	{
-
 		btSerial->turnOffBlueTooth();
-
 		digitalWrite(13, HIGH);
-
 		delay(5000);
-
 		digitalWrite(13, LOW);
 	}
 }
@@ -604,12 +595,12 @@ void loop()
 	{
 		voltageActivity();
 	}
-	if (!(_isOnMotionDetect && _isAlarmOn))
+	if (!(_isOnMotionDetect && _isAlarmOn && _isPIRSensorActivated))
 	{
 		pirSensorActivity();
 	}
 	isMotionDetect();
-	if (!(_isOnMotionDetect && _isAlarmOn) )
+	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		blueToothConfigurationSystem();
 	}
@@ -618,7 +609,8 @@ void loop()
 
 void isMotionDetect()
 {
-	if (_isDisableCall || _findOutPhonesMode == 2 || _isPIRSensorActivated) { 
+	if (_isDisableCall || _findOutPhonesMode == 2 /*|| _isPIRSensorActivated*/) { 
+		_isOnMotionDetect = false;
 		//readIncomingSMS();
 		return; }
 	if ((millis() - _millsStart) > _sensitivityAlarm)
@@ -627,7 +619,7 @@ void isMotionDetect()
 		_isFirstTilt = true;
 	}
 
-	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn &&_isExternalInterruptOn && !digitalRead(3))) //&& !isOnConfiguration)									 /*if(true)*/
+	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && !digitalRead(3))) //&& !isOnConfiguration)									 /*if(true)*/
 	{
 		//Serial.println("lampeggio");
 		blinkLed();
