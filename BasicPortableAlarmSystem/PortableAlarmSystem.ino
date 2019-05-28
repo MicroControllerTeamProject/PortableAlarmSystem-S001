@@ -595,7 +595,7 @@ void loop()
 	{
 		voltageActivity();
 	}
-	if (!(_isOnMotionDetect && _isAlarmOn && _isPIRSensorActivated))
+	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		pirSensorActivity();
 	}
