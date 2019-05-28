@@ -625,6 +625,7 @@ void isMotionDetect()
 		blinkLed();
 
 		detachInterrupt(0);
+		detachInterrupt(1);
 
 		if ((!_isFirstTilt || (_precision == 9)) && _precision != 0)
 		{
@@ -663,9 +664,13 @@ void isMotionDetect()
 			_isFirstTilt = false;
 			_millsStart = millis();
 		}
-		EIFR = 0x01;
+		EIFR |= 1 << INTF1; //clear external interrupt 1
+		EIFR |= 1 << INTF0; //clear external interrupt 0
+		//EIFR = 0x01;
+		sei();
 
 		attachInterrupt(0, motionTiltInternalInterrupt, RISING);
+		attachInterrupt(1, motionTiltExternalInterrupt, RISING);
 
 		_isOnMotionDetect = false;
 	}
