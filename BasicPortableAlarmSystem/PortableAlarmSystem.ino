@@ -772,72 +772,72 @@ void loadMainMenu()
 	String battery = calculateBatteryLevel(_voltageValue);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(result, BlueToothCommandsUtil::Title));
 
-	char* commandString = new char[15];
+	//char* commandString = new char[15];
 
-	String(F("Configuration")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Menu, F("001")));
+	//String(F("Configuration")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Configuration", BlueToothCommandsUtil::Menu, F("001")));
 
-	String(F("Security")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Menu, F("004")));
+	//String(F("Security")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Security", BlueToothCommandsUtil::Menu, F("004")));
 
 	if (!_isAlarmOn)
 	{
-		String(F("Alarm On")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Command, F("002")));
+		//String(F("Alarm On")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Alarm On", BlueToothCommandsUtil::Command, F("002")));
 	}
 	else
 	{
-		String(F("Alarm OFF")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Command, F("003")));
+		//String(F("Alarm OFF")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Alarm OFF", BlueToothCommandsUtil::Command, F("003")));
 	}
 
-	String(F("Temp.:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(internalTemperature), BlueToothCommandsUtil::Info));
+	//String(F("Temp.:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Temp.:" + String(internalTemperature), BlueToothCommandsUtil::Info));
 
 	/*btSerial->println(BlueToothCommandsUtil::CommandConstructor("Batt.value:" + String(_voltageValue), BlueToothCommandsUtil::Info));*/
 
-	String(F("Batt.level:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + battery, BlueToothCommandsUtil::Info));
+	//String(F("Batt.level:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Batt.level:" + battery, BlueToothCommandsUtil::Info));
 
-	String(F("WhatzUp:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _whatIsHappened, BlueToothCommandsUtil::Info));
+	//String(F("WhatzUp:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("WhatzUp:" + _whatIsHappened, BlueToothCommandsUtil::Info));
 
 	/*String(F("Signal:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _signalStrength, BlueToothCommandsUtil::Info));*/
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	btSerial->Flush();
-	delete(commandString);
+	//delete(commandString);
 }
 
 void loadConfigurationMenu() 
 {
-	char* commandString = new char[15];
-	String(F("Configuration")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString, BlueToothCommandsUtil::Title));
+	//char* commandString = new char[15];
+	//String(F("Configuration")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Configuration", BlueToothCommandsUtil::Title));
 
-	String(F("Phone:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumber, BlueToothCommandsUtil::Data, F("001")));
+	//String(F("Phone:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Phone:" + _phoneNumber, BlueToothCommandsUtil::Data, F("001")));
 
-	String(F("Ph.Altern.:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _phoneNumberAlternative, BlueToothCommandsUtil::Data, F("099")));
+	//String(F("Ph.Altern.:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Ph.Altern.:" + _phoneNumberAlternative, BlueToothCommandsUtil::Data, F("099")));
 
-	String(F("N.Phone:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
+	//String(F("N.Phone:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("N.Phone:" + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
 
-	String(F("TempMax:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
+	//String(F("TempMax:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("TempMax:" + String(_tempMax), BlueToothCommandsUtil::Data, F("004")));
 
-	String(F("OffSetTemp:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_offSetTempValue), BlueToothCommandsUtil::Data, F("095")));
+	//String(F("OffSetTemp:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("OffSetTemp:" + String(_offSetTempValue), BlueToothCommandsUtil::Data, F("095")));
 
-	String(F("Apn:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _apn, BlueToothCommandsUtil::Data, F("096")));
+	//String(F("Apn:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Apn:" + _apn, BlueToothCommandsUtil::Data, F("096")));
 
 	if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
 	{
-		String(F("Prec.:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_precision), BlueToothCommandsUtil::Data, F("002")));
+		//String(F("Prec.:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Prec.:" + String(_precision), BlueToothCommandsUtil::Data, F("002")));
 	}
 
 	/*String(F("TempON:")).toCharArray(commandString, 15);
@@ -847,33 +847,33 @@ void loadConfigurationMenu()
 
 	if (_findOutPhonesMode != 2)
 	{
-		String(F("PIR status:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
+		//String(F("PIR status:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("PIR status:" + String(_isPIRSensorActivated), BlueToothCommandsUtil::Data, F("005")));
 	}
 
 	if (_findOutPhonesMode != 0)
 	{
-		String(F("Addr:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceAddress, BlueToothCommandsUtil::Data, F("010")));
+		//String(F("Addr:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Addr:" + _deviceAddress, BlueToothCommandsUtil::Data, F("010")));
 
-		String(F("Name:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _deviceName, BlueToothCommandsUtil::Data, F("011")));
+		//String(F("Name:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Name:" + _deviceName, BlueToothCommandsUtil::Data, F("011")));
 
-		String(F("FindTime.:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
+		//String(F("FindTime.:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("FindTime.:" + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
 
 	}
 
-	String(F("Find phone:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
+	//String(F("Find phone:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Find phone:" + String(_findOutPhonesMode), BlueToothCommandsUtil::Data, F("012")));
 	
-	String(F("Ext.Int:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isExternalInterruptOn), BlueToothCommandsUtil::Data, F("013")));
+	//String(F("Ext.Int:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Ext.Int:" + String(_isExternalInterruptOn), BlueToothCommandsUtil::Data, F("013")));
 
 
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
-	delete(commandString);
+	//delete(commandString);
 }
 
 void blueToothConfigurationSystem()
@@ -1424,6 +1424,7 @@ void readIncomingSMS()
 			String smsCommand = response.substring(index + 1, index + 7);
 			smsCommand.trim();
 			//Serial.println(smsCommand);
+			delay(1000);
 			listOfSmsCommands(smsCommand);
 		}
 	}
