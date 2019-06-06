@@ -73,6 +73,10 @@ const byte _addressDelayFindMe = 94;
 
 const byte _addressExternalInterruptIsOn = 96;
 
+const byte _addressStartDeviceAddress2 = 98;
+
+const byte _addressStartDeviceName2 = 110;
+
 
 uint8_t _isPIRSensorActivated = 0;
 
@@ -116,7 +120,11 @@ String _signalStrength;
 
 String _deviceAddress = "";
 
+String _deviceAddress2 = "";
+
 String _deviceName = "";
+
+String _deviceName2 = "";
 
 float _voltageValue = 0;
 
@@ -166,9 +174,12 @@ char _bufTemperatureMax[BUFSIZETEMPERATUREMAX];
 
 const int BUFSIZEDEVICEADDRESS = 13;
 char _bufDeviceAddress[BUFSIZEDEVICEADDRESS];
+char _bufDeviceAddress2[BUFSIZEDEVICEADDRESS];
+
 
 const int BUFSIZEDEVICENAME = 15;
 char _bufDeviceName[BUFSIZEDEVICENAME];
+char _bufDeviceName2[BUFSIZEDEVICENAME];
 
 const int BUFSIZEAPN = 25;
 char _bufApn[BUFSIZEAPN];
@@ -249,22 +260,16 @@ void setup()
 
 void initilizeEEPromData()
 {
-
-
 	EEPROM.write(0, 1);
-
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
 
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _bufPhoneNumber, BUFSIZEPHONENUMBER);
-
 	_phoneNumber = String(_bufPhoneNumber);
 
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumberAlternative, _bufPhoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
-
 	_phoneNumberAlternative = String(_bufPhoneNumberAlternative);
 
 	eepromRW->eeprom_read_string(_addressDBPhoneIsON, _bufDbPhoneON, BUFSIZEDBPHONEON);
-
 	_phoneNumbers = atoi(&_bufDbPhoneON[0]);
 
 	//eepromRW->eeprom_read_string(_addressStartBTSleepIsON, _bufBTSleepIsON, BUFSIZEBTSLEEPISON);
@@ -282,50 +287,43 @@ void initilizeEEPromData()
 	_isTemperatureCheckOn = atoi(&_bufTemperatureIsOn[0]);
 */
 	eepromRW->eeprom_read_string(_addressStartFindOutPhonesON, _bufFindOutPhonesON, BUFSIZEFINDOUTPHONESON);
-
 	_findOutPhonesMode = atoi(&_bufFindOutPhonesON[0]);
 
 	eepromRW->eeprom_read_string(_addressStartBufPirSensorIsON, _bufPirSensorIsON, BUFSIZEPIRSENSORISON);
-
 	_isPIRSensorActivated = atoi(&_bufPirSensorIsON[0]);
 
 	eepromRW->eeprom_read_string(_addressStartBufPrecisionNumber, _bufPrecisionNumber, BUFSIZEPRECISION);
-
 	_precision = atoi(&_bufPrecisionNumber[0]);
 
 	eepromRW->eeprom_read_string(_addressStartBufTemperatureMax, _bufTemperatureMax, BUFSIZETEMPERATUREMAX);
-
 	_tempMax = atoi(_bufTemperatureMax);
 
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress, _bufDeviceAddress, BUFSIZEDEVICEADDRESS);
-
 	_deviceAddress = String(_bufDeviceAddress);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName, _bufDeviceName, BUFSIZEDEVICENAME);
-
 	_deviceName = String(_bufDeviceName);
 
+	eepromRW->eeprom_read_string(_addressStartDeviceAddress2, _bufDeviceAddress2, BUFSIZEDEVICEADDRESS);
+	_deviceAddress2 = String(_bufDeviceAddress2);
+
+	eepromRW->eeprom_read_string(_addressStartDeviceName2, _bufDeviceName2, BUFSIZEDEVICENAME);
+	_deviceName2 = String(_bufDeviceName2);
+
+
 	eepromRW->eeprom_read_string(_addressApn, _bufApn, BUFSIZEAPN);
-
 	_apn = String(_bufApn);
-
 	_apn.trim();
 
-
 	eepromRW->eeprom_read_string(_addressOffSetTemperature, _bufOffSetTemperature, BUFSIZEOFFSETTEMPERATURE);
-
 	_offSetTempValue = atoi(_bufOffSetTemperature);
 
-
 	eepromRW->eeprom_read_string(_addressDelayFindMe, _bufDelayFindMe, BUFSIZEDELAYFINDME);
-
 	_delayFindMe = atoi(_bufDelayFindMe);
 
 	eepromRW->eeprom_read_string(_addressExternalInterruptIsOn, _bufExternalInterruptIsON, BUFSIZEEXTERNALINTERRUPTISON);
-
 	_isExternalInterruptOn = atoi(&_bufExternalInterruptIsON[0]);
-
 
 	delete(eepromRW);
 
@@ -493,8 +491,14 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 		for (uint8_t i = 0; i < _delayFindMe; i++)
 		{
 			_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
-
-			if (_isDeviceDetected) { break; };
+			if (_isDeviceDetected) { break; 
+			};
+			_deviceAddress2.trim();
+			_deviceName2.trim();
+			if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1){
+				_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
+				if (_isDeviceDetected) { break; };
+			}
 		}
 
 		//bool isHumanDetected = pirSensor->isHumanDetected();
@@ -859,6 +863,11 @@ void loadConfigurationMenu()
 		//String(F("Name:")).toCharArray(commandString, 15);
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Name:" + _deviceName, BlueToothCommandsUtil::Data, F("011")));
 
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Addr2:" + _deviceAddress2, BlueToothCommandsUtil::Data, F("015")));
+
+		//String(F("Name:")).toCharArray(commandString, 15);
+		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Name2:" + _deviceName2, BlueToothCommandsUtil::Data, F("016")));
+
 		//String(F("FindTime.:")).toCharArray(commandString, 15);
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor("FindTime.:" + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
 
@@ -1150,6 +1159,32 @@ void blueToothConfigurationSystem()
 			}
 			loadConfigurationMenu();
 		}
+
+		if (_bluetoothData.indexOf(F("D015")) > -1)
+		{
+			String splitString = splitStringIndex(_bluetoothData, ';', 1);
+			if (isValidNumber(splitString))
+			{
+				splitString.toCharArray(_bufDeviceAddress2, BUFSIZEDEVICEADDRESS);
+				eepromRW->eeprom_write_string(_addressStartDeviceAddress2, _bufDeviceAddress2);
+				_deviceAddress2 = splitString;
+			}
+			loadConfigurationMenu();
+		}
+
+		if (_bluetoothData.indexOf(F("D016")) > -1)
+		{
+			String splitString = splitStringIndex(_bluetoothData, ';', 1);
+			if (isValidNumber(splitString))
+			{
+				splitString.toCharArray(_bufDeviceName2, BUFSIZEDEVICENAME);
+				eepromRW->eeprom_write_string(_addressStartDeviceName2, _bufDeviceName2);
+				_deviceName2 = splitString;
+			}
+			loadConfigurationMenu();
+		}
+
+
 
 		if (_bluetoothData.indexOf(F("D012")) > -1)
 		{
