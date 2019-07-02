@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-P001 1.4-beta";
+char version[15] = "-P001 1.5-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -412,9 +412,9 @@ void motionTiltExternalInterrupt(){
 
 void motionTiltInternalInterrupt()
 {
-	/*if (!_isPIRSensorActivated) {*/
+	if (!_isPIRSensorActivated) {
 		_isOnMotionDetect = true;
-	//}
+	}
 }
 
 String getSignalStrength()
