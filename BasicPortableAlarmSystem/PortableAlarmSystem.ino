@@ -94,9 +94,13 @@ char _prefix[4] = "+39";
 
 bool _isAlarmOn = false;
 
-String _phoneNumber;
+//String _phoneNumber;
 
-String _phoneNumberAlternative;
+char _phoneNumber[11];
+
+//String _phoneNumberAlternative;
+
+char _phoneNumberAlternative[11];
 
 String _whatIsHappened = "";
 
@@ -143,10 +147,10 @@ String _apn = "";
 bool _isDeviceDetected = false;
 
 const int BUFSIZEPHONENUMBER = 11;
-char _bufPhoneNumber[BUFSIZEPHONENUMBER];
+//char _bufPhoneNumber[BUFSIZEPHONENUMBER];
 
 const int BUFSIZEPHONENUMBERALTERANATIVE = 11;
-char _bufPhoneNumberAlternative[BUFSIZEPHONENUMBERALTERANATIVE];
+//char _bufPhoneNumberAlternative[BUFSIZEPHONENUMBERALTERANATIVE];
 
 const int BUFSIZEPRECISION = 2;
 char _bufPrecisionNumber[BUFSIZEPRECISION];
@@ -263,11 +267,11 @@ void initilizeEEPromData()
 	EEPROM.write(0, 1);
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
 
-	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _bufPhoneNumber, BUFSIZEPHONENUMBER);
-	_phoneNumber = String(_bufPhoneNumber);
+	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _phoneNumber, BUFSIZEPHONENUMBER);
+	//_phoneNumber = String(_bufPhoneNumber);
 
-	eepromRW->eeprom_read_string(_addressStartBufPhoneNumberAlternative, _bufPhoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
-	_phoneNumberAlternative = String(_bufPhoneNumberAlternative);
+	eepromRW->eeprom_read_string(_addressStartBufPhoneNumberAlternative, _phoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
+	//_phoneNumberAlternative = String(_bufPhoneNumberAlternative);
 
 	eepromRW->eeprom_read_string(_addressDBPhoneIsON, _bufDbPhoneON, BUFSIZEDBPHONEON);
 	_phoneNumbers = atoi(&_bufDbPhoneON[0]);
@@ -347,17 +351,21 @@ void callSim900(char isLongCaller)
 	
 		if (_isDisableCall) { return; }
 
+		char phoneNumber[14];
+
+		strcpy(phoneNumber, _prefix);
+
 		//Clear buffer before call
-		mySim900->ReadIncomingChars2();
+		//mySim900->ReadIncomingChars2();
 	
-		String phoneNumber = _prefix + _phoneNumber;
+	/*	String phoneNumber = _prefix + _phoneNumber;
 		String phoneNumberAlternative = _prefix + _phoneNumberAlternative;
 		char completePhoneNumber[14];
 		char completePhoneNumberAlternative[14];
 		phoneNumber.toCharArray(completePhoneNumber, 14);
-		phoneNumberAlternative.toCharArray(completePhoneNumberAlternative, 14);
+		phoneNumberAlternative.toCharArray(completePhoneNumberAlternative, 14);*/
 
-		unsigned long callTime;
+		/*unsigned long callTime;
 
 		switch (isLongCaller)
 		{
@@ -370,37 +378,47 @@ void callSim900(char isLongCaller)
 		deafault:
 			callTime = 40000;
 			break;
+		}*/
+		
+		if (_phoneNumbers == 1)
+		{
+			strcat(phoneNumber, _phoneNumber);
 		}
-
-		mySim900->DialVoiceCall(completePhoneNumber);
-
+		
 		if (_phoneNumbers == 2)
 		{
-
-			delay(callTime);
-
-			mySim900->ATCommand("AT+CHUP");
-
-			delay(2000);
-
-			mySim900->DialVoiceCall(completePhoneNumberAlternative);
-
-			if (isLongCaller != 1)
-			{
-				delay(callTime);
-				mySim900->ATCommand("AT+CHUP");
-			}
-			//mySim900->ReadIncomingChars2();
-
+			strcat(phoneNumber, _phoneNumberAlternative);
 		}
 
-		mySim900->ClearBuffer(2000);
+		mySim900->DialVoiceCall(phoneNumber);
 
-		/*if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
-		{*/
-			turnOnBlueToothAndSetTurnOffTimer(false);
-		//}
-	//}
+	//	if (_phoneNumbers == 2)
+	//	{
+
+	//		delay(callTime);
+
+	//		mySim900->ATCommand("AT+CHUP");
+
+	//		delay(2000);
+
+	//		mySim900->DialVoiceCall(completePhoneNumberAlternative);
+
+	//		if (isLongCaller != 1)
+	//		{
+	//			delay(callTime);
+	//			mySim900->ATCommand("AT+CHUP");
+	//		}
+	//		//mySim900->ReadIncomingChars2();
+
+	//	}
+
+	//	mySim900->ClearBuffer(2000);
+
+	//	/*if (_findOutPhonesMode == 0 || _findOutPhonesMode == 1)
+	//	{*/
+	//		turnOnBlueToothAndSetTurnOffTimer(false);
+	//	//}
+	////}
 
 }
 
@@ -821,10 +839,10 @@ void loadConfigurationMenu()
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Configuration", BlueToothCommandsUtil::Title));
 
 	//String(F("Phone:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Phone:" + _phoneNumber, BlueToothCommandsUtil::Data, F("001")));
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Phone:" + String(_phoneNumber), BlueToothCommandsUtil::Data, F("001")));
 
 	//String(F("Ph.Altern.:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Ph.Altern.:" + _phoneNumberAlternative, BlueToothCommandsUtil::Data, F("099")));
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Ph.Altern.:" + String(_phoneNumberAlternative), BlueToothCommandsUtil::Data, F("099")));
 
 	//String(F("N.Phone:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("N.Phone:" + String(_phoneNumbers), BlueToothCommandsUtil::Data, F("098")));
@@ -958,9 +976,9 @@ void blueToothConfigurationSystem()
 				/*const int BUFSIZEPHONENUMBER = 11;
 				char _bufPhoneNumber[BUFSIZEPHONENUMBER];*/
 
-				splitString.toCharArray(_bufPhoneNumber, BUFSIZEPHONENUMBER);
-				eepromRW->eeprom_write_string(1, _bufPhoneNumber);
-				_phoneNumber = splitString;
+				splitString.toCharArray(_phoneNumber, BUFSIZEPHONENUMBER);
+				eepromRW->eeprom_write_string(1, _phoneNumber);
+				//_phoneNumber = splitString;
 			}
 			loadConfigurationMenu();
 		}
@@ -1048,9 +1066,9 @@ void blueToothConfigurationSystem()
 				/*const int BUFSIZEPHONENUMBERALTERNATIVE = 11;
 				char _bufPhoneNumberAlternative[BUFSIZEPHONENUMBERALTERNATIVE];*/
 
-				splitString.toCharArray(_bufPhoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
-				eepromRW->eeprom_write_string(_addressStartBufPhoneNumberAlternative, _bufPhoneNumberAlternative);
-				_phoneNumberAlternative = splitString;
+				splitString.toCharArray(_phoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
+				eepromRW->eeprom_write_string(_addressStartBufPhoneNumberAlternative, _phoneNumberAlternative);
+				//_phoneNumberAlternative = splitString;
 			}
 			loadConfigurationMenu();
 		}
@@ -1607,7 +1625,7 @@ void getCoordinates()
 			/*Serial.println(site);*/
 			if (a != F("") && b != F(""))
 			{
-				mySim900->SendTextMessageSimple(site, _prefix + _phoneNumber);
+				mySim900->SendTextMessageSimple(site, String(_phoneNumber));
 			}
 		}
 
