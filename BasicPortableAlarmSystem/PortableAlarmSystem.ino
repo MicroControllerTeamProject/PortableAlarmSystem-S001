@@ -264,7 +264,7 @@ void setup()
 
 void initilizeEEPromData()
 {
-	EEPROM.write(0, 1);
+	//EEPROM.write(0, 1);
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
 
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _phoneNumber, BUFSIZEPHONENUMBER);
