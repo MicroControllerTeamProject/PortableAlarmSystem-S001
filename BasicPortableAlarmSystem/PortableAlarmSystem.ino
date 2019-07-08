@@ -1372,10 +1372,11 @@ boolean isValidNumber(String str)
 
 void pirSensorActivity()
 {
+	//Serial.println(analogRead(A5));
 	if (_isDisableCall) { return; }
 	if (_isPIRSensorActivated && _isAlarmOn)
 	{
-		if (digitalRead(5))
+		if (digitalRead(A5) || (analogRead(A5) > 200))
 		{
 			blinkLed();
 			_whatIsHappened = F("P");
