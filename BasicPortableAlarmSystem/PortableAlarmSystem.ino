@@ -259,7 +259,8 @@ void setup()
 		Serial.println(s);
 	}*/
 
-	pinMode(5, INPUT_PULLUP);
+	pinMode(A5, INPUT_PULLUP);
+	pinMode(A4, INPUT_PULLUP);
 
 	blinkLed();
 }
@@ -1378,7 +1379,7 @@ void pirSensorActivity()
 	if (_isDisableCall) { return; }
 	if (_isPIRSensorActivated && _isAlarmOn)
 	{
-		if (digitalRead(5))
+		if (digitalRead(A5) && digitalRead(A4))
 		{
 			blinkLed();
 			_whatIsHappened = F("P");
