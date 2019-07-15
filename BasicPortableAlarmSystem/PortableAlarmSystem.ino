@@ -80,6 +80,8 @@ const byte _addressStartDeviceName2 = 110;
 
 uint8_t _isPIRSensorActivated = 0;
 
+bool _isBlueLedDisable = true;
+
 bool _isDisableCall = false;
 
 bool _isOnMotionDetect = false;
@@ -727,7 +729,7 @@ void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
 
 void blinkLed()
 {
-
+	if (_isBlueLedDisable) { return; }
 	pinMode(_pin_powerLed, OUTPUT);
 	for (uint8_t i = 0; i < 3; i++)
 	{
@@ -1536,6 +1538,22 @@ void listOfSmsCommands(String command)
 		btSerial->turnOffBlueTooth();
 		callSim900('0');
 	}
+
+	//Accende led
+	if (command == F("Al"))
+	{
+		_isBlueLedDisable = false;
+		blinkLed();
+		callSim900('0');
+	}
+	//Spegne led
+	if (command == F("Sl"))
+	{
+		_isBlueLedDisable = true;
+		blinkLed();
+		callSim900('0');
+	}
+
 	//Coordinate geolocalizzazione.
 	if (command == F("Po"))
 	{
