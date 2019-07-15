@@ -727,6 +727,7 @@ void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
 
 void blinkLed()
 {
+
 	pinMode(_pin_powerLed, OUTPUT);
 	for (uint8_t i = 0; i < 3; i++)
 	{
@@ -1375,7 +1376,13 @@ boolean isValidNumber(String str)
 
 void pirSensorActivity()
 {
-	//Serial.println(analogRead(A5));
+	//Serial.print("analogRead(A4) = "); Serial.println(analogRead(A4));
+	//Serial.print("digitalRead(A4) = "); Serial.println(digitalRead(A4));
+	//Serial.println("---------------------------------------------------------");
+	//Serial.print("analogRead(A5) = "); Serial.println(analogRead(A5));
+	//Serial.print("digitalRead(A5) = "); Serial.println(digitalRead(A5));
+
+	//delay(1000);
 	if (_isDisableCall) { return; }
 	if (_isPIRSensorActivated && _isAlarmOn)
 	{
@@ -1384,14 +1391,13 @@ void pirSensorActivity()
 			blinkLed();
 			_whatIsHappened = F("P");
 
-
 			if (_findOutPhonesMode == 1)
 			{
 				if (!_isDeviceDetected)
 				{
 					callSim900('1');
 					_isMasterMode = false;
-					reedRelaySensorActivity(A4);
+					//reedRelaySensorActivity(A4);
 				}
 			}
 			else
