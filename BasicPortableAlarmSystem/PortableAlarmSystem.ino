@@ -397,6 +397,8 @@ void callSim900(char isLongCaller)
 
 		mySim900->DialVoiceCall(phoneNumber);
 
+		delay(10000);
+
 	//	if (_phoneNumbers == 2)
 	//	{
 
