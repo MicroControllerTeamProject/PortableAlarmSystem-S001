@@ -80,7 +80,7 @@ const byte _addressStartDeviceName2 = 110;
 
 uint8_t _isPIRSensorActivated = 0;
 
-bool _isBlueLedDisable = true;
+bool _isBlueLedDisable = false;
 
 bool _isDisableCall = false;
 
@@ -665,13 +665,13 @@ void isMotionDetect()
 				if (!_isDeviceDetected)
 				{
 					callSim900('1');
-
+					_isMasterMode = false;
 				}
 			}
 			else
 			{
 				callSim900('1');
-
+				_isMasterMode = false;
 			}
 			//Accendo bluetooth con ritardo annesso solo se è scattato allarme,troppo critico
 			//per perdere tempo se non scattato allarme.
