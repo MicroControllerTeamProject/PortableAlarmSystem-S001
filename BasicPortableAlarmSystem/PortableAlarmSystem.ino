@@ -88,6 +88,8 @@ bool _isOnMotionDetect = false;
 
 bool _isFirstTilt = true;
 
+bool _isPositionEnable = false;
+
 unsigned long _sensitivityAlarm;
 
 uint8_t _precision = 0;
@@ -585,6 +587,8 @@ void loop()
 		readIncomingSMS();
 	}
 
+	
+
 	/*if (_delayForSignalStrength->IsDelayTimeFinished(true))
 	{
 		_signalStrength = getSignalStrength();
@@ -616,14 +620,22 @@ void loop()
 	{
 		turnOnBlueToothIfMotionIsDetected();
 	}
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		internalTemperatureActivity();
 	}
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		voltageActivity();
 	}
+
+	if (_isPositionEnable)
+	{
+		getCoordinates();
+	}
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		pirSensorActivity();
@@ -1557,9 +1569,15 @@ void listOfSmsCommands(String command)
 	}
 
 	//Coordinate geolocalizzazione.
-	if (command == F("Po"))
+	if (command == F("Pe"))
 	{
-		getCoordinates();
+		_isPositionEnable = true;
+	}
+
+
+	if (command == F("Pd"))
+	{
+		_isPositionEnable = false;
 	}
 }
 
@@ -1573,7 +1591,7 @@ void getCoordinates()
 
 	_apn.toCharArray(apnString, (_apn.length() + 1));
 
-	strcpy(apnCommand, "AT + SAPBR = 3, 1,\"APN\", \"");
+	strcpy(apnCommand, "AT+SAPBR=3, 1,\"APN\", \"");
 
 	strcat(apnCommand, apnString);
 
@@ -1596,75 +1614,58 @@ void getCoordinates()
 	/*mySim900->ATCommand("AT + SAPBR = 3, 1,\"APN\", \"ibox.tim.it\"");*/
 
 	delay(1500);
-	//if (mySim900->IsAvailable() > 0)
-	//{
-	//	/*Serial.println(mySim900->ReadIncomingChars2());*/
-	//	mySim900->ReadIncomingChars2();
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
 
-	//}
+	}
 
-	
-
-	mySim900->ATCommand("AT + SAPBR = 0, 1");
+	mySim900->ATCommand("AT+SAPBR=0,1");
 	delay(2000);
-	//if (mySim900->IsAvailable() > 0)
-	//{
-	//	//Serial.println(mySim900->ReadIncomingChars2());
-	//	mySim900->ReadIncomingChars2();
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
 
-	//}
-	mySim900->ATCommand("AT + SAPBR = 1, 1");
+	}
+	mySim900->ATCommand("AT+SAPBR=1,1");
 	delay(2000);
-	//if (mySim900->IsAvailable() > 0)
-	//{
-	//	//Serial.println(mySim900->ReadIncomingChars2());
-	//	mySim900->ReadIncomingChars2();
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
 
-	//}
-	mySim900->ATCommand("AT + SAPBR = 2, 1");
-	delay(1500);
-	//if (mySim900->IsAvailable() > 0)
-	//{
-	//	//Serial.println(mySim900->ReadIncomingChars2());
-	//	mySim900->ReadIncomingChars2();
+	}
+	mySim900->ATCommand("AT+SAPBR=2,1");
+	delay(5500);
+	if (mySim900->IsAvailable() > 0)
+	{
+		//Serial.println(mySim900->ReadIncomingChars2());
+		mySim900->ReadIncomingChars2();
 
-	//}
-	mySim900->ReadIncomingChars2();
-	mySim900->ATCommand("AT + CIPGSMLOC = 1, 1");
+	}
+
+	mySim900->ATCommand("AT+CIPGSMLOC=1,1");
 	delay(10000);
 	if (mySim900->IsAvailable() > 0)
 	{
 		String h = mySim900->ReadIncomingChars2();
 		h.trim();
-		/*Serial.println(h);*/
-		/*Serial.println(h);
-		Serial.println(h.indexOf(F("+CIPGSMLOC:")));
-		Serial.println(h.substring(24, 35));*/
 
-		if (h.substring(24, 35) == F("+CIPGSMLOC:"))
+		if (h.substring(19, 30) == F("+CIPGSMLOC:"))
 		{
-			/*Serial.println("Entrato");*/
-			String a = splitStringIndex(h, ',', 3);
-			String b = splitStringIndex(h, ',', 2);
-			//String c = F(",");
-			a.trim(); b.trim();
+			//Serial.println("Entrato");
+			String b = h.substring(33, 42);
+			String a = h.substring(43, 52);
 			String site = F("google.com/maps/search/?api=1&query=");
-			site = site + a + F(","); //+ F(",") + b;
-			//site = site + c;
-			site = site + b;
-			/*Serial.println(site);*/
-			if (a != F("") && b != F(""))
-			{
-				mySim900->SendTextMessageSimple(site, String(_phoneNumber));
-			}
+			site = site + a + ',' + b;
+			mySim900->SendTextMessageSimple(site, String(_phoneNumber));
 		}
 
 		
 
 	}
-	//Resetta la sim dopo SAPBR 1,1
-	delay(10000);
-	mySim900->ATCommand("AT + SAPBR = 0, 1");
 }
 
 double getTemp(void)
