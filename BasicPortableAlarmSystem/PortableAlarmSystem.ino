@@ -520,11 +520,14 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 			_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
 			if (_isDeviceDetected) { break; 
 			};
-			_deviceAddress2.trim();
-			_deviceName2.trim();
-			if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1){
-				_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
-				if (_isDeviceDetected) { break; };
+			if (_findOutPhonesMode == 1)
+			{
+				_deviceAddress2.trim();
+				_deviceName2.trim();
+				if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1) {
+					_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
+					if (_isDeviceDetected) { break; };
+				}
 			}
 		}
 
