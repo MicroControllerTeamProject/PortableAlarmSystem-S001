@@ -92,7 +92,7 @@ bool _isPositionEnable = false;
 
 unsigned long _sensitivityAlarm;
 
-uint8_t _precision = 0;
+//uint8_t _precision = 0;
 
 char _prefix[4] = "+39";
 
@@ -232,7 +232,7 @@ void setup()
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	}
 
-	_sensitivityAlarm = 2000 + ((_precision) * 500);
+	//_sensitivityAlarm = 2000 + ((_precision) * 500);
 
 	btSerial->turnOnBlueTooth();
 
@@ -303,8 +303,8 @@ void initilizeEEPromData()
 	eepromRW->eeprom_read_string(_addressStartBufPirSensorIsON, _bufPirSensorIsON, BUFSIZEPIRSENSORISON);
 	_isPIRSensorActivated = atoi(&_bufPirSensorIsON[0]);
 
-	eepromRW->eeprom_read_string(_addressStartBufPrecisionNumber, _bufPrecisionNumber, BUFSIZEPRECISION);
-	_precision = atoi(&_bufPrecisionNumber[0]);
+	/*eepromRW->eeprom_read_string(_addressStartBufPrecisionNumber, _bufPrecisionNumber, BUFSIZEPRECISION);
+	_precision = atoi(&_bufPrecisionNumber[0]);*/
 
 	eepromRW->eeprom_read_string(_addressStartBufTemperatureMax, _bufTemperatureMax, BUFSIZETEMPERATUREMAX);
 	_tempMax = atoi(_bufTemperatureMax);
@@ -671,8 +671,8 @@ void isMotionDetect()
 		detachInterrupt(0);
 		detachInterrupt(1);
 
-		if ((!_isFirstTilt || (_precision == 9)) && _precision != 0)
-		{
+	/*	if ((!_isFirstTilt || (_precision == 9)) && _precision != 0)
+		{*/
 			_whatIsHappened = F("M");
 
 			if (_findOutPhonesMode == 1)
@@ -702,12 +702,12 @@ void isMotionDetect()
 				isFindOutPhonesONAndSetBluetoothInMasterMode();
 
 				
-		}
+		/*}
 		else
 		{
 			_isFirstTilt = false;
 			_millsStart = millis();
-		}
+		}*/
 		EIFR |= 1 << INTF1; //clear external interrupt 1
 		EIFR |= 1 << INTF0; //clear external interrupt 0
 		//EIFR = 0x01;
@@ -879,16 +879,14 @@ void loadConfigurationMenu()
 	//String(F("Apn:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Apn:" + _apn, BlueToothCommandsUtil::Data, F("096")));
 
-	if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
-	{
-		//String(F("Prec.:")).toCharArray(commandString, 15);
-		btSerial->println(BlueToothCommandsUtil::CommandConstructor("Prec.:" + String(_precision), BlueToothCommandsUtil::Data, F("002")));
-	}
+	//if (!_isPIRSensorActivated && _findOutPhonesMode == 0)
+	//{
+	//	//String(F("Prec.:")).toCharArray(commandString, 15);
+	//	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Prec.:" + String(_precision), BlueToothCommandsUtil::Data, F("002")));
+	//}
 
 	/*String(F("TempON:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + String(_isTemperatureCheckOn), BlueToothCommandsUtil::Data, F("003")));*/
-
-
 
 	if (_findOutPhonesMode != 2)
 	{
@@ -911,7 +909,6 @@ void loadConfigurationMenu()
 
 		//String(F("FindTime.:")).toCharArray(commandString, 15);
 		btSerial->println(BlueToothCommandsUtil::CommandConstructor("FindTime.:" + String(_delayFindMe), BlueToothCommandsUtil::Data, F("094")));
-
 	}
 
 	//String(F("Find phone:")).toCharArray(commandString, 15);
@@ -919,8 +916,6 @@ void loadConfigurationMenu()
 	
 	//String(F("Ext.Int:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Ext.Int:" + String(_isExternalInterruptOn), BlueToothCommandsUtil::Data, F("013")));
-
-
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	//delete(commandString);
@@ -1096,19 +1091,19 @@ void blueToothConfigurationSystem()
 			loadConfigurationMenu();
 		}
 
-		if (_bluetoothData.indexOf(F("D002")) > -1)
-		{
-			String splitString = splitStringIndex(_bluetoothData, ';', 1);
-			if (isValidNumber(splitString))
-			{
-				/*char _bufPrecisionNumber[2];*/
-				splitString.toCharArray(_bufPrecisionNumber, 2);
-				eepromRW->eeprom_write_string(12, _bufPrecisionNumber);
-				_precision = atoi(&_bufPrecisionNumber[0]);
-				_sensitivityAlarm = 2000 + ((_precision) * 500);
-			}
-			loadConfigurationMenu();
-		}
+		//if (_bluetoothData.indexOf(F("D002")) > -1)
+		//{
+		//	String splitString = splitStringIndex(_bluetoothData, ';', 1);
+		//	if (isValidNumber(splitString))
+		//	{
+		//		/*char _bufPrecisionNumber[2];*/
+		//		splitString.toCharArray(_bufPrecisionNumber, 2);
+		//		eepromRW->eeprom_write_string(12, _bufPrecisionNumber);
+		//		_precision = atoi(&_bufPrecisionNumber[0]);
+		//		_sensitivityAlarm = 2000 + ((_precision) * 500);
+		//	}
+		//	loadConfigurationMenu();
+		//}
 
 		//if (_bluetoothData.indexOf(F("D003")) > -1)
 		//{
