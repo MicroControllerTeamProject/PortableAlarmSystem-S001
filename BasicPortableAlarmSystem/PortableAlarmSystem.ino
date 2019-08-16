@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-P001 1.8-beta";
+char version[15] = "-P001 1.9-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -821,6 +821,7 @@ void loadMainMenu()
 
 	//String(F("Configuration")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Configuration", BlueToothCommandsUtil::Menu, F("001")));
+
 
 	//String(F("Security")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Security", BlueToothCommandsUtil::Menu, F("004")));
