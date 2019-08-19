@@ -15,17 +15,17 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-P001 1.9-beta";
+char version[15] = "-P01 1.01-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
-//ActivityManager* _delayForDialCall = new ActivityManager(1); 
+ActivityManager* _delayForGetCoordinates= new ActivityManager(120); 
 
 ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
-//ActivityManager* _delayForSignalStrength = new ActivityManager(30);
+ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
 MyBlueTooth* btSerial;
 
@@ -444,11 +444,9 @@ void motionTiltInternalInterrupt()
 	}
 }
 
-String getSignalStrength()
+void getSignalStrength()
 {
-	String signalStrength = "";
-	signalStrength = mySim900->GetSignalStrength();
-	return signalStrength;
+	_signalStrength = mySim900->GetSignalStrength();
 }
 
 void turnOffBluetoohIfTimeIsOver()
@@ -565,21 +563,6 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 	}
 }
 
-//Test used only for test tilt sensor.
-//void testForTiltSensor()
-//{
-//	Serial.print("digitalRead = "); Serial.print(digitalRead(2));
-//	Serial.print("--pinPowerBluetooth = "); Serial.print(digitalRead(6));
-//	Serial.print("--_isOnMotionDetect = "); Serial.println(_isOnMotionDetect);
-//
-//	if (_isOnMotionDetect == true) {
-//		_isOnMotionDetect = false;
-//		Serial.println("Eccezione rilevata");
-//		//delay(1000000000);
-//	}
-//	delay(1000);
-//}
-
 void loop()
 {
 	//testForTiltSensor()
@@ -590,17 +573,10 @@ void loop()
 		readIncomingSMS();
 	}
 
-	
-
-	/*if (_delayForSignalStrength->IsDelayTimeFinished(true))
+	if (_delayForSignalStrength->IsDelayTimeFinished(true))
 	{
-		_signalStrength = getSignalStrength();
-	}*/
-
-	//if (_delayForCheckBlueToothWorking->IsDelayTimeFinished(true) && !_isBTSleepON && _isFindOutPhonesON == 0)
-	//{
-	//	restartBlueTooth();
-	//}
+		getSignalStrength();
+	}
 
 	if ((!(_isOnMotionDetect && _isAlarmOn)) || _findOutPhonesMode == 2)
 	{
@@ -636,7 +612,10 @@ void loop()
 
 	if (_isPositionEnable)
 	{
-		getCoordinates();
+		if (_delayForGetCoordinates->IsDelayTimeFinished(true))
+		{
+			getCoordinates();
+		}
 	}
 
 	if (!(_isOnMotionDetect && _isAlarmOn))
@@ -648,7 +627,6 @@ void loop()
 	{
 		blueToothConfigurationSystem();
 	}
-	//getCoordinates();
 }
 
 void isMotionDetect()
@@ -848,8 +826,8 @@ void loadMainMenu()
 	//String(F("WhatzUp:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("WhatzUp:" + _whatIsHappened, BlueToothCommandsUtil::Info));
 
-	/*String(F("Signal:")).toCharArray(commandString, 15);
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor(commandString + _signalStrength, BlueToothCommandsUtil::Info));*/
+	//String(F("Signal:")).toCharArray(commandString, 15);
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Signal:" + _signalStrength, BlueToothCommandsUtil::Info));
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	btSerial->Flush();
@@ -1373,12 +1351,6 @@ void blueToothConfigurationSystem()
 	}
 	delete(eepromRW);
 }
-
-//void updateCommand()
-//{
-//	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Updated"), BlueToothCommandsUtil::Message));
-//	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
-//}
 
 boolean isValidNumber(String str)
 {
