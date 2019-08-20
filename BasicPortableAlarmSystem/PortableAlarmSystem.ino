@@ -1485,15 +1485,15 @@ void listOfSmsCommands(String command)
 	_timeLastCall = 0;
 	command.trim();
 
-	//Accende il sistema
+	//Attiva chiamate
 	if (command == F("Ac"))
 	{
 		_isDisableCall = false;
 		_isMasterMode = false;
 		callSim900('0');
 	}
-	//Spegne il sistema
-	if (command == F("Sp"))
+	//Disattiva chiamate
+	if (command == F("Dc"))
 	{
 		//Serial.println("Disabilito chiamate");
 		callSim900('0');
