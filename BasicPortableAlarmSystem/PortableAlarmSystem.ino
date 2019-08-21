@@ -77,10 +77,9 @@ const byte _addressStartDeviceAddress2 = 98;
 
 const byte _addressStartDeviceName2 = 110;
 
-
 uint8_t _isPIRSensorActivated = 0;
 
-bool _isBlueLedDisable = false;
+bool _isBlueLedDisable = true;
 
 bool _isDisableCall = false;
 
@@ -142,7 +141,7 @@ unsigned long _millsStart = 0;
 
 bool _isMasterMode = false;
 
-unsigned long timeToTurnOfBTAfterPowerOn = 300000;
+unsigned long _timeToTurnOfBTAfterPowerOn = 300000;
 
 unsigned long _timeAfterPowerOnForBTFinder = 300000;
 
@@ -201,7 +200,7 @@ char _bufDelayFindMe[BUFSIZEDELAYFINDME];
 const int BUFSIZEEXTERNALINTERRUPTISON = 2;
 char _bufExternalInterruptIsON[BUFSIZEEXTERNALINTERRUPTISON];
 
-unsigned long _timeLastCall = 0;
+
 
 void setup()
 {
@@ -351,7 +350,7 @@ void inizializeInterrupts()
 	attachInterrupt(1, motionTiltExternalInterrupt, RISING);
 }
 
-void callSim900(char isLongCaller)
+void callSim900()
 {
 	/*if (_delayForDialCall->IsDelayTimeFinished(true))
 	{*/
@@ -452,7 +451,7 @@ void getSignalStrength()
 void turnOffBluetoohIfTimeIsOver()
 {
 	if (_findOutPhonesMode == 0
-		&& (millis() > timeToTurnOfBTAfterPowerOn) 
+		&& (millis() > _timeToTurnOfBTAfterPowerOn) 
 		&&	btSerial->isBlueToothOn()
 		&& _isBTSleepON
 		)
@@ -552,7 +551,7 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 		{
 			if (_findOutPhonesMode == 2)
 			{
-				callSim900('1');
+				callSim900();
 				//delay(10000);
 				_isMasterMode = false;
 			}
@@ -657,13 +656,13 @@ void isMotionDetect()
 			{
 				if (!_isDeviceDetected)
 				{
-					callSim900('1');
+					callSim900();
 					_isMasterMode = false;
 				}
 			}
 			else
 			{
-				callSim900('1');
+				callSim900();
 				_isMasterMode = false;
 			}
 			//Accendo bluetooth con ritardo annesso solo se è scattato allarme,troppo critico
@@ -716,7 +715,7 @@ void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
 	{
 		btSerial->ReceveMode();
 		btSerial->turnOnBlueTooth();
-		timeToTurnOfBTAfterPowerOn = millis() + 300000;
+		_timeToTurnOfBTAfterPowerOn = millis() + 300000;
 		_timeAfterPowerOnForBTFinder = millis() + 120000;
 	}
 	_isMasterMode = false;
@@ -1199,8 +1198,6 @@ void blueToothConfigurationSystem()
 			loadConfigurationMenu();
 		}
 
-
-
 		if (_bluetoothData.indexOf(F("D012")) > -1)
 		{
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
@@ -1249,7 +1246,7 @@ void blueToothConfigurationSystem()
 
 #pragma endregion
 
-#pragma endregion
+#pragma Configuration Menu endregion
 
 
 #pragma region Security-M004
@@ -1382,14 +1379,14 @@ void pirSensorActivity()
 			{
 				if (!_isDeviceDetected)
 				{
-					callSim900('1');
+					callSim900();
 					_isMasterMode = false;
 					//reedRelaySensorActivity(A4);
 				}
 			}
 			else
 			{
-				callSim900('1');
+				callSim900();
 				_isMasterMode = false;
 			}
 		}
@@ -1432,7 +1429,7 @@ void internalTemperatureActivity()
 		{
 
 			_whatIsHappened = F("T");
-			callSim900('1');
+			callSim900();
 		}
 		/*delete chipTemp;*/
 	}
@@ -1448,7 +1445,7 @@ void voltageActivity()
 		if (_voltageValue < _voltageMinValue)
 		{
 			_whatIsHappened = F("V");
-			callSim900('1');
+			callSim900();
 		}
 	}
 }
@@ -1482,74 +1479,99 @@ void readIncomingSMS()
 
 void listOfSmsCommands(String command)
 {
-	_timeLastCall = 0;
 	command.trim();
-
 	//Attiva chiamate
-	if (command == F("Ac"))
-	{
-		_isDisableCall = false;
-		_isMasterMode = false;
-		callSim900('0');
-	}
+	//if (command == F("Ac"))
+	//{
+	//	_isDisableCall = false;
+	//	_isMasterMode = false;
+	//	callSim900();
+	//}
+
 	//Disattiva chiamate
 	if (command == F("Dc"))
 	{
 		//Serial.println("Disabilito chiamate");
-		callSim900('0');
 		_isDisableCall = true;
-
+		callSim900();
 	}
-	//Allarme ON
-	if (command == F("Ao"))
-	{
-		_isDisableCall = false;
-		callSim900('0');
-		if (_findOutPhonesMode == 1 || _findOutPhonesMode == 2)
-		{
-			_timeAfterPowerOnForBTFinder = 0;
-		}
-		_isAlarmOn = true;
+	////Allarme ON
+	//if (command == F("Ao"))
+	//{
+	//	_isDisableCall = false;
+	//	callSim900('0');
+	//	if (_findOutPhonesMode == 1 || _findOutPhonesMode == 2)
+	//	{
+	//		_timeAfterPowerOnForBTFinder = 0;
+	//	}
+	//	_isAlarmOn = true;
+	//}
 
-	}
 	//Accende bluetooth
 	if (command == F("Ab"))
 	{
 		turnOnBlueToothAndSetTurnOffTimer(true);
 	}
-	//Spegne bluetooth
-	if (command == F("Sb"))
-	{
-		btSerial->turnOffBlueTooth();
-		callSim900('0');
-	}
-
 	//Accende led
 	if (command == F("Al"))
 	{
 		_isBlueLedDisable = false;
 		blinkLed();
-		callSim900('0');
+		callSim900();
 	}
-	//Spegne led
-	if (command == F("Sl"))
+	//Check system
+	if (command == F("Ck"))
 	{
-		_isBlueLedDisable = true;
-		blinkLed();
-		callSim900('0');
+		callSim900();
 	}
-
-	//Coordinate geolocalizzazione.
+	//Position enable.
 	if (command == F("Pe"))
 	{
 		_isPositionEnable = true;
 	}
-
-
+	//Position disable.
 	if (command == F("Pd"))
 	{
 		_isPositionEnable = false;
 	}
+	//Attiva motion detect senza bluetooth
+	if (command == F("Md"))
+	{
+		activateFunctionAlarm(0,0,0);
+	}
+	//Attiva motion detect con bluetooth
+	if (command == F("Mb"))
+	{
+		activateFunctionAlarm(1,0,0);
+	}
+	//Attiva pir sensor senza bluetooth
+	if (command == F("Wc"))
+	{
+		activateFunctionAlarm(0, 1, 0);
+	}
+	//Attiva pir sensor con bluetooth
+	if (command == F("Wb"))
+	{
+		activateFunctionAlarm(1, 1, 0);
+	}
+	//Find me
+	if (command == F("Fm"))
+	{
+		activateFunctionAlarm(2, 0, 0);
+	}
+}
+
+void activateFunctionAlarm(uint8_t isBluetoothActivated, uint8_t isPIRSensorActivated, uint8_t isExternalInterruptOn)
+{
+	_findOutPhonesMode = isBluetoothActivated;
+	_isPIRSensorActivated = isPIRSensorActivated;
+	_isExternalInterruptOn = isExternalInterruptOn;
+	_timeToTurnOfBTAfterPowerOn = 0;
+	_timeAfterPowerOnForBTFinder = 0;
+	_isDisableCall = false;
+	_isAlarmOn = true;
+	blinkLed();
+	callSim900();
 }
 
 void getCoordinates()
