@@ -630,7 +630,7 @@ void loop()
 
 void isMotionDetect()
 {
-	if (_isDisableCall || _findOutPhonesMode == 2 /*|| _isPIRSensorActivated*/) { 
+	if (_isDisableCall || _findOutPhonesMode == 2 || _isPIRSensorActivated) { 
 		_isOnMotionDetect = false;
 		//readIncomingSMS();
 		return; }
@@ -1491,9 +1491,8 @@ void listOfSmsCommands(String command)
 	//Disattiva chiamate
 	if (command == F("Dc"))
 	{
-		//Serial.println("Disabilito chiamate");
-		_isDisableCall = true;
 		callSim900();
+		_isDisableCall = true;
 	}
 	////Allarme ON
 	//if (command == F("Ao"))
@@ -1534,38 +1533,75 @@ void listOfSmsCommands(String command)
 	{
 		_isPositionEnable = false;
 	}
+
+	//Attiva funzione non vedermi
+	if (command == F("Nv"))
+	{
+		_findOutPhonesMode = 1;
+		blinkLed();
+		callSim900();
+	}
+
+	////Attiva funzione vedi tutti
+	//if (command == F("Vt"))
+	//{
+	//	_findOutPhonesMode = 0;
+	//	blinkLed();
+	//	callSim900();
+	//}
+
+	//Attiva External interrupt
+	if (command == F("Ex"))
+	{
+		_isExternalInterruptOn = 1;
+		blinkLed();
+		callSim900();
+	}
+
+	//Disattiva External interrupt
+	if (command == F("Ey"))
+	{
+		_isExternalInterruptOn = 0;
+		blinkLed();
+		callSim900();
+	}
+
 	//Attiva motion detect senza bluetooth
 	if (command == F("Md"))
 	{
-		activateFunctionAlarm(0,0,0);
+		_isPIRSensorActivated = 0;
+		_findOutPhonesMode = 0;
+		activateFunctionAlarm();
 	}
-	//Attiva motion detect con bluetooth
-	if (command == F("Mb"))
-	{
-		activateFunctionAlarm(1,0,0);
-	}
+	////Attiva motion detect con bluetooth
+	//if (command == F("Mb"))
+	//{
+	//	activateFunctionAlarm(0,0);
+	//}
+
 	//Attiva pir sensor senza bluetooth
 	if (command == F("Wc"))
 	{
-		activateFunctionAlarm(0, 1, 0);
+		_isPIRSensorActivated = 1;
+		_findOutPhonesMode = 0;
+		activateFunctionAlarm();
 	}
-	//Attiva pir sensor con bluetooth
-	if (command == F("Wb"))
-	{
-		activateFunctionAlarm(1, 1, 0);
-	}
+	////Attiva pir sensor con bluetooth
+	//if (command == F("Wb"))
+	//{
+	//	activateFunctionAlarm(1, 0);
+	//}
+
 	//Find me
 	if (command == F("Fm"))
 	{
-		activateFunctionAlarm(2, 0, 0);
+		_findOutPhonesMode = 2;
+		activateFunctionAlarm();
 	}
 }
 
-void activateFunctionAlarm(uint8_t isBluetoothActivated, uint8_t isPIRSensorActivated, uint8_t isExternalInterruptOn)
+void activateFunctionAlarm()
 {
-	_findOutPhonesMode = isBluetoothActivated;
-	_isPIRSensorActivated = isPIRSensorActivated;
-	_isExternalInterruptOn = isExternalInterruptOn;
 	_timeToTurnOfBTAfterPowerOn = 0;
 	_timeAfterPowerOnForBTFinder = 0;
 	_isDisableCall = false;
