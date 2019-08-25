@@ -398,8 +398,18 @@ void callSim900()
 
 		mySim900->DialVoiceCall(phoneNumber);
 
+		
+
+		/*mySim900->ClearBuffer(1000);
+
+		mySim900->Flush();*/
+
+
 		delay(10000);
 
+		mySim900->ReadIncomingChars2();
+
+		
 	//	if (_phoneNumbers == 2)
 	//	{
 
