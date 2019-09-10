@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-P01 2.01-beta";
+char version[15] = "-P01 2.02-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -1477,6 +1477,11 @@ void readIncomingSMS()
 		if (response.indexOf("+CMGL:") != -1)
 		{
 			blinkLed();
+			if (response.substring(36, 46) != _phoneNumber && response.substring(36, 46) != _phoneNumberAlternative)
+			{
+				//Serial.println("Numero errato");
+				return;
+			}
 			int index = response.lastIndexOf('"');
 			String smsCommand = response.substring(index + 1, index + 7);
 			smsCommand.trim();
