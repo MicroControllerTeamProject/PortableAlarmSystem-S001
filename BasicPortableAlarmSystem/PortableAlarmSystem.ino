@@ -1530,7 +1530,6 @@ void listOfSmsCommands(String command)
 	if (command == F("Al"))
 	{
 		_isBlueLedDisable = false;
-		blinkLed();
 		callSim900();
 	}
 	//Check system
@@ -1553,7 +1552,6 @@ void listOfSmsCommands(String command)
 	if (command == F("Nv"))
 	{
 		_findOutPhonesMode = 1;
-		blinkLed();
 		callSim900();
 	}
 
