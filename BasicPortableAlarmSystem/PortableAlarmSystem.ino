@@ -1470,14 +1470,22 @@ void readIncomingSMS()
 	if (mySim900->IsAvailable() > 0)
 	{
 		String response = mySim900->ReadIncomingChars2();
-		//Serial.println(response);
+		delay(500);
+		//Serial.print("####"); Serial.print(response); Serial.println("####");
 		response.trim();
 		//if (response.substring(0, 5) == F("+CMT:"))
 		//if (response.indexOf("+CMT:") != -1)
 		if (response.indexOf("+CMGL:") != -1)
 		{
 			blinkLed();
-			if (response.substring(36, 46) != _phoneNumber && response.substring(36, 46) != _phoneNumberAlternative)
+
+			//Serial.println(response.substring(51, 61));
+			//Serial.println(response.substring(36, 46));
+
+			if (response.substring(36, 46) != _phoneNumber && 
+				response.substring(51, 61) != _phoneNumber && 
+				response.substring(36, 46) != _phoneNumberAlternative &&
+				response.substring(51, 61) != _phoneNumberAlternative)
 			{
 				//Serial.println("Numero errato");
 				return;
