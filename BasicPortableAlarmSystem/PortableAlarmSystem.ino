@@ -1575,7 +1575,6 @@ void listOfSmsCommands(String command)
 	if (command == F("Ex"))
 	{
 		_isExternalInterruptOn = 1;
-		blinkLed();
 		callSim900();
 	}
 
@@ -1583,7 +1582,6 @@ void listOfSmsCommands(String command)
 	if (command == F("Ey"))
 	{
 		_isExternalInterruptOn = 0;
-		blinkLed();
 		callSim900();
 	}
 
@@ -1627,7 +1625,6 @@ void activateFunctionAlarm()
 	_timeAfterPowerOnForBTFinder = 0;
 	_isDisableCall = false;
 	_isAlarmOn = true;
-	blinkLed();
 	callSim900();
 }
 
