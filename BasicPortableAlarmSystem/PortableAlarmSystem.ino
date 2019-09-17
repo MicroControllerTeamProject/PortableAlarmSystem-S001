@@ -525,8 +525,7 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 		for (uint8_t i = 0; i < _delayFindMe; i++)
 		{
 			_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
-			if (_isDeviceDetected) { break; 
-			};
+			if (_isDeviceDetected) { break;}
 			if (_findOutPhonesMode == 1)
 			{
 				_deviceAddress2.trim();
