@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "-P01 2.10-beta";
+char version[15] = "-P01 2.11-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -1588,6 +1588,7 @@ void listOfSmsCommands(String command)
 	//Attiva motion detect senza bluetooth
 	if (command == F("Md"))
 	{
+		_isBTSleepON = true;
 		_isPIRSensorActivated = 0;
 		_findOutPhonesMode = 0;
 		activateFunctionAlarm();
