@@ -1554,36 +1554,28 @@ void listOfSmsCommands(String command)
 	{
 		_isPositionEnable = false;
 	}
-
 	//Attiva funzione non vedermi
 	if (command == F("Nv"))
 	{
 		_findOutPhonesMode = 1;
+		_isBTSleepON = false;
 		callSim900();
 	}
-
-	////Attiva funzione vedi tutti
-	//if (command == F("Vt"))
-	//{
-	//	_findOutPhonesMode = 0;
-	//	blinkLed();
-	//	callSim900();
-	//}
-
+	
 	//Attiva External interrupt
 	if (command == F("Ex"))
 	{
 		_isExternalInterruptOn = 1;
 		callSim900();
 	}
-
+	
 	//Disattiva External interrupt
 	if (command == F("Ey"))
 	{
 		_isExternalInterruptOn = 0;
 		callSim900();
 	}
-
+	
 	//Attiva motion detect senza bluetooth
 	if (command == F("Md"))
 	{
@@ -1592,28 +1584,20 @@ void listOfSmsCommands(String command)
 		_findOutPhonesMode = 0;
 		activateFunctionAlarm();
 	}
-	////Attiva motion detect con bluetooth
-	//if (command == F("Mb"))
-	//{
-	//	activateFunctionAlarm(0,0);
-	//}
-
+	
 	//Attiva pir sensor senza bluetooth
 	if (command == F("Wc"))
 	{
+		_isBTSleepON = true;
 		_isPIRSensorActivated = 1;
 		_findOutPhonesMode = 0;
 		activateFunctionAlarm();
 	}
-	////Attiva pir sensor con bluetooth
-	//if (command == F("Wb"))
-	//{
-	//	activateFunctionAlarm(1, 0);
-	//}
-
+	
 	//Find me
 	if (command == F("Fm"))
 	{
+		_isBTSleepON = false;
 		_findOutPhonesMode = 2;
 		activateFunctionAlarm();
 	}
