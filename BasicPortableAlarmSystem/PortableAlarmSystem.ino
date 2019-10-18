@@ -1264,9 +1264,12 @@ void listOfSmsCommands(String command)
 	//Attiva External interrupt
 	if (command == F("Ex"))
 	{
+		_isBTSleepON = true;
+		_isPIRSensorActivated = 0;
+		_findOutPhonesMode = 0;
+		_isBuzzerOn = 0;
 		_isExternalInterruptOn = 1;
-		_isAlarmOn = true;
-		callSim900();
+		activateFunctionAlarm();
 	}
 	//Disattiva External interrupt
 	if (command == F("Ey"))
