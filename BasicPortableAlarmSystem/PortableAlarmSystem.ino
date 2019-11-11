@@ -22,8 +22,8 @@ ActivityManager* _delayForTemperature = new ActivityManager(60);
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
 ActivityManager* _delayForGetCoordinates= new ActivityManager(120); 
-
-ActivityManager* _delayForFindPhone = new ActivityManager(30); 
+//
+//ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
 ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
@@ -220,6 +220,8 @@ void setup()
 
 	_oldPassword = btSerial->GetPassword();
 
+	//Serial.print("oldPassword : "); Serial.println(_oldPassword);
+
 	btSerial->ReceveMode();
 
 	initilizeEEPromData();
@@ -352,6 +354,9 @@ void inizializeInterrupts()
 
 void callSim900()
 {
+
+	//Serial.println("Chiamata");
+
 	/*if (_delayForDialCall->IsDelayTimeFinished(true))
 	{*/
 	
@@ -588,11 +593,11 @@ void loop()
 
 	if ((!(_isOnMotionDetect && _isAlarmOn)) || _findOutPhonesMode == 2)
 	{
-		if (_delayForFindPhone->IsDelayTimeFinished(true))
-		{
+	/*	if (_delayForFindPhone->IsDelayTimeFinished(true))
+		{*/
 			//Serial.println("Sto cercando");
 			isFindOutPhonesONAndSetBluetoothInMasterMode();
-		}
+		//}
 	}
 
 	//if (_delayForCallNumbers->IsDelayTimeFinished(true))
