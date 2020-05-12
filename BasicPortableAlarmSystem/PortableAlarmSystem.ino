@@ -1564,7 +1564,9 @@ void listOfSmsCommands(String command)
 	{
 		_findOutPhonesMode = 1;
 		_isBTSleepON = false;
-		callSim900();
+		_timeAfterPowerOnForBTFinder = 0;
+		isFindOutPhonesONAndSetBluetoothInMasterMode();
+		//callSim900();
 	}
 	
 	//Attiva External interrupt
