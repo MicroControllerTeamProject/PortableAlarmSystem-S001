@@ -362,9 +362,9 @@ void callSim900()
 	
 		if (_isDisableCall) { return; }
 
-		char phoneNumber[14];
+		char phoneNumberToCall[14];
 
-		strcpy(phoneNumber, _prefix);
+		strcpy(phoneNumberToCall, _prefix);
 
 		//Clear buffer before call
 		//mySim900->ReadIncomingChars2();
@@ -393,18 +393,17 @@ void callSim900()
 		
 		if (_phoneNumbers == 1)
 		{
-			strcat(phoneNumber, _phoneNumber);
+			strcat(phoneNumberToCall, _phoneNumber);
+			mySim900->DialVoiceCall(phoneNumberToCall);
 		}
 		
 		if (_phoneNumbers == 2)
 		{
-			strcat(phoneNumber, _phoneNumberAlternative);
+			strcat(phoneNumberToCall, _phoneNumberAlternative);
+			mySim900->DialVoiceCall(phoneNumberToCall);
 		}
 
-		mySim900->DialVoiceCall(phoneNumber);
-
-		
-
+	
 		/*mySim900->ClearBuffer(1000);
 
 		mySim900->Flush();*/
