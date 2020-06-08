@@ -1514,6 +1514,18 @@ void listOfSmsCommands(String command)
 	//	callSim900();
 	//}
 
+	if (command == F("P1"))
+	{
+		_phoneNumbers = 1;
+		callSim900();
+	}
+
+	if (command == F("P2"))
+	{
+		_phoneNumbers = 2;
+		callSim900();
+	}
+
 	//Disattiva chiamate
 	if (command == F("Dc"))
 	{
