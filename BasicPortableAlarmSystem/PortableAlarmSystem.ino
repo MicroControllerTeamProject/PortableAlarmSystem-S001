@@ -1518,7 +1518,7 @@ void listOfSmsCommands(String command)
 	//Disattiva chiamate
 	if (command == F("Dc"))
 	{
-		callSim900();
+		//callSim900();
 		_isDisableCall = true;
 	}
 	////Allarme ON
@@ -1580,7 +1580,7 @@ void listOfSmsCommands(String command)
 	if (command == F("Ey"))
 	{
 		_isExternalInterruptOn = 0;
-		callSim900();
+		//callSim900();
 	}
 	
 	//Attiva motion detect senza bluetooth
