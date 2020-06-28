@@ -478,18 +478,18 @@ void turnOffBluetoohIfTimeIsOver()
 	}
 }
 
-void turnOnBlueToothIfMotionIsDetected()
-{
-	if (_isOnMotionDetect
-		&& !_isAlarmOn
-		&& btSerial->isBlueToothOff()
-		&& _isBTSleepON
-		)
-	{
-		_isOnMotionDetect = false;
-		turnOnBlueToothAndSetTurnOffTimer(false);
-	}
-}
+//void turnOnBlueToothIfMotionIsDetected()
+//{
+//	if (_isOnMotionDetect
+//		&& !_isAlarmOn
+//		&& btSerial->isBlueToothOff()
+//		&& _isBTSleepON
+//		)
+//	{
+//		_isOnMotionDetect = false;
+//		turnOnBlueToothAndSetTurnOffTimer(false);
+//	}
+//}
 
 bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 {
@@ -608,10 +608,10 @@ void loop()
 	{
 		turnOffBluetoohIfTimeIsOver();
 	}
-	if (!(_isOnMotionDetect && _isAlarmOn))
+	/*if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		turnOnBlueToothIfMotionIsDetected();
-	}
+	}*/
 
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
