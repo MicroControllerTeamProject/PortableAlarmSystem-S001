@@ -679,14 +679,14 @@ void isMotionDetect()
 				callSim900();
 				_isMasterMode = false;
 			}
-			//Accendo bluetooth con ritardo annesso solo se è scattato allarme,troppo critico
-			//per perdere tempo se non scattato allarme.
-			if (btSerial->isBlueToothOff() && _findOutPhonesMode == 0)
-			{
-				delay(30000);
-				turnOnBlueToothAndSetTurnOffTimer(false);
-			}
+			////Accendo bluetooth con ritardo annesso solo se è scattato allarme,troppo critico
+			////per perdere tempo se non scattato allarme.
+			//if (btSerial->isBlueToothOff() && _findOutPhonesMode == 0)
+			//{
+			//	delay(30000);
+			//	turnOnBlueToothAndSetTurnOffTimer(false);
 			//}
+			////}
 
 				readIncomingSMS();
 
