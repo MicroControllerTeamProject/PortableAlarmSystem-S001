@@ -939,6 +939,7 @@ void blueToothConfigurationSystem()
 			_isAlarmOn = true;
 			_isOnMotionDetect = false;
 			_timeAfterPowerOnForBTFinder = 0;
+			_timeToTurnOfBTAfterPowerOn = 0;
 			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm ON"), BlueToothCommandsUtil::Title));
 		/*	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm ON"), BlueToothCommandsUtil::Message));
 			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));*/
