@@ -627,7 +627,7 @@ void loop()
 	{
 		if (_delayForGetCoordinates->IsDelayTimeFinished(true))
 		{
-			getCoordinates();
+			//getCoordinates();
 		}
 	}
 
