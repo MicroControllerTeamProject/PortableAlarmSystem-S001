@@ -409,11 +409,12 @@ void callSim900()
 
 		mySim900->Flush();*/
 
-
-		delay(10000);
-
-		mySim900->ReadIncomingChars2();
-
+		//disable that if there is buzzer
+		if (false)
+		{
+			delay(10000);
+			mySim900->ReadIncomingChars2();
+		}
 		
 	//	if (_phoneNumbers == 2)
 	//	{
@@ -1373,6 +1374,16 @@ boolean isValidNumber(String str)
 	return false;
 }
 
+void buzzerSensorActivity()
+{
+	for (uint8_t i= 0; i < 15; i++)
+	{
+		tone(5, 400, 500);
+		delay(1000);
+		noTone(5);
+	}
+}
+
 void pirSensorActivity()
 {
 	//Serial.print("analogRead(A4) = "); Serial.println(analogRead(A4));
@@ -1394,6 +1405,10 @@ void pirSensorActivity()
 			{
 				if (!_isDeviceDetected)
 				{
+					if (true)
+					{
+						buzzerSensorActivity();
+					}
 					callSim900();
 					_isMasterMode = false;
 					//reedRelaySensorActivity(A4);
@@ -1401,6 +1416,10 @@ void pirSensorActivity()
 			}
 			else
 			{
+				if (true)
+				{
+					buzzerSensorActivity();
+				}
 				callSim900();
 				_isMasterMode = false;
 			}
