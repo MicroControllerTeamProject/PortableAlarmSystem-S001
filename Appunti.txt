@@ -1,0 +1,2 @@
+Sembra che sulla sim800 l'antenna fissa saldata non serva e 
+addirittura limiti il segnale. 

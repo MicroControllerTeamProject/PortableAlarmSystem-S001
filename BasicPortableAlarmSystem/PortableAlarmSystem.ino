@@ -403,18 +403,20 @@ void callSim900()
 
 		mySim900->DialVoiceCall(phoneNumber);
 
-		
+		delay(1000);
+
+		//Inserita per scaricare buffer dopo chiamata
+		//dove si puo aggiungere codice per recupero risultato.
+		//E agevola la pulizia per la ricezione sms.
+		mySim900->ReadIncomingChars2();
 
 		/*mySim900->ClearBuffer(1000);
 
 		mySim900->Flush();*/
 
 		//disable that if there is buzzer
-		if (false)
-		{
-			delay(10000);
-			mySim900->ReadIncomingChars2();
-		}
+		//keep atention
+		
 		
 	//	if (_phoneNumbers == 2)
 	//	{
@@ -1486,6 +1488,9 @@ void voltageActivity()
 
 void readIncomingSMS()
 {
+	//Inserita per scaricare buffer e agevolare arrivo sms.
+	mySim900->ReadIncomingChars2();
+
 	mySim900->ATCommand("AT+CMGL");//=\"REC UNREAD\"");
 	//mySim900->ATCommand("AT+CMGR=1");
 	delay(100);
