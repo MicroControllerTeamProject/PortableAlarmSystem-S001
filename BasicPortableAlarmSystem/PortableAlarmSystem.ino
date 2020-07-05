@@ -41,6 +41,7 @@ const byte _pin_rxSIM900 = 7;
 
 const byte _pin_txSIM900 = 8;
 
+
 const byte _addressStartBufPhoneNumber = 1;
 
 const byte _addressStartBufPrecisionNumber = 12;
@@ -77,6 +78,9 @@ const byte _addressStartDeviceAddress2 = 98;
 
 const byte _addressStartDeviceName2 = 110;
 
+const byte _addressBuzzerIsOn = 122;
+
+
 uint8_t _isPIRSensorActivated = 0;
 
 bool _isBlueLedDisable = true;
@@ -112,6 +116,8 @@ String _whatIsHappened = "";
 uint8_t _isBTSleepON = 1;
 
 uint8_t _isExternalInterruptOn = 0;
+
+uint8_t _isBuzzerOn = 0;
 
 uint8_t _phoneNumbers = 0;
 
@@ -155,11 +161,11 @@ const int BUFSIZEPHONENUMBER = 11;
 const int BUFSIZEPHONENUMBERALTERANATIVE = 11;
 //char _bufPhoneNumberAlternative[BUFSIZEPHONENUMBERALTERANATIVE];
 
-const int BUFSIZEPRECISION = 2;
-char _bufPrecisionNumber[BUFSIZEPRECISION];
+//const int BUFSIZEPRECISION = 2;
+//char _bufPrecisionNumber[BUFSIZEPRECISION];
 
-const int BUFSIZETEMPERATUREISON = 2;
-char _bufTemperatureIsOn[BUFSIZETEMPERATUREISON];
+//const int BUFSIZETEMPERATUREISON = 2;
+//char _bufTemperatureIsOn[BUFSIZETEMPERATUREISON];
 
 //const int BUFSIZEFINDMODE = 2;
 //char _bufFindMode[BUFSIZEFINDMODE];
@@ -200,7 +206,8 @@ char _bufDelayFindMe[BUFSIZEDELAYFINDME];
 const int BUFSIZEEXTERNALINTERRUPTISON = 2;
 char _bufExternalInterruptIsON[BUFSIZEEXTERNALINTERRUPTISON];
 
-
+const int BUFSIZEBUZZERISON = 2;
+char _bufBuzzerIsON[BUFSIZEBUZZERISON];
 
 void setup()
 {
@@ -272,7 +279,6 @@ void setup()
 
 void initilizeEEPromData()
 {
-	//EEPROM.write(0, 1);
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
 
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _phoneNumber, BUFSIZEPHONENUMBER);
@@ -288,11 +294,9 @@ void initilizeEEPromData()
 
 	//_isBTSleepON = atoi(&_bufBTSleepIsON[0]);
 
-
 	/*eepromRW->eeprom_read_string(_addressStartFindMode, _bufFindMode, BUFSIZEFINDMODE);
 
 	_findMode = atoi(&_bufFindMode[0]);*/
-
 
 	/*eepromRW->eeprom_read_string(_addressStartBufTemperatureIsOn, _bufTemperatureIsOn, BUFSIZETEMPERATUREISON);
 
@@ -310,7 +314,6 @@ void initilizeEEPromData()
 	eepromRW->eeprom_read_string(_addressStartBufTemperatureMax, _bufTemperatureMax, BUFSIZETEMPERATUREMAX);
 	_tempMax = atoi(_bufTemperatureMax);
 
-
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress, _bufDeviceAddress, BUFSIZEDEVICEADDRESS);
 	_deviceAddress = String(_bufDeviceAddress);
 
@@ -322,7 +325,6 @@ void initilizeEEPromData()
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName2, _bufDeviceName2, BUFSIZEDEVICENAME);
 	_deviceName2 = String(_bufDeviceName2);
-
 
 	eepromRW->eeprom_read_string(_addressApn, _bufApn, BUFSIZEAPN);
 	_apn = String(_bufApn);
@@ -337,8 +339,10 @@ void initilizeEEPromData()
 	eepromRW->eeprom_read_string(_addressExternalInterruptIsOn, _bufExternalInterruptIsON, BUFSIZEEXTERNALINTERRUPTISON);
 	_isExternalInterruptOn = atoi(&_bufExternalInterruptIsON[0]);
 
-	delete(eepromRW);
+	eepromRW->eeprom_read_string(_addressBuzzerIsOn, _bufBuzzerIsON, BUFSIZEBUZZERISON);
+	_isBuzzerOn = atoi(&_bufBuzzerIsON[0]);
 
+	delete(eepromRW);
 }
 
 void inizializePins()
@@ -912,6 +916,8 @@ void loadConfigurationMenu()
 	//String(F("Ext.Int:")).toCharArray(commandString, 15);
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Ext.Int:" + String(_isExternalInterruptOn), BlueToothCommandsUtil::Data, F("013")));
 
+	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Buzz.:" + String(_isBuzzerOn), BlueToothCommandsUtil::Data, F("014")));
+
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 	//delete(commandString);
 }
@@ -1262,6 +1268,18 @@ void blueToothConfigurationSystem()
 			loadConfigurationMenu();
 		}
 
+		if (_bluetoothData.indexOf(F("D014")) > -1)
+		{
+			String splitString = splitStringIndex(_bluetoothData, ';', 1);
+			if (isValidNumber(splitString))
+			{
+				splitString.toCharArray(_bufBuzzerIsON, BUFSIZEBUZZERISON);
+				eepromRW->eeprom_write_string(_addressBuzzerIsOn, _bufBuzzerIsON);
+				_isBuzzerOn = atoi(&_bufBuzzerIsON[0]);
+			}
+			loadConfigurationMenu();
+		}
+
 #pragma endregion
 
 #pragma Configuration Menu endregion
@@ -1407,7 +1425,7 @@ void pirSensorActivity()
 			{
 				if (!_isDeviceDetected)
 				{
-					if (true)
+					if (_isBuzzerOn)
 					{
 						buzzerSensorActivity();
 					}
@@ -1418,7 +1436,7 @@ void pirSensorActivity()
 			}
 			else
 			{
-				if (true)
+				if (_isBuzzerOn)
 				{
 					buzzerSensorActivity();
 				}
