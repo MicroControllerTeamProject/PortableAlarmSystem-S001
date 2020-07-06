@@ -15,7 +15,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 3.10-beta";
+char version[15] = "S001 3.50-beta";
  
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -79,7 +79,6 @@ const byte _addressStartDeviceAddress2 = 98;
 const byte _addressStartDeviceName2 = 110;
 
 const byte _addressBuzzerIsOn = 122;
-
 
 uint8_t _isPIRSensorActivated = 0;
 
@@ -642,14 +641,16 @@ void loop()
 	{
 		pirSensorActivity();
 	}
-	isMotionDetect();
+
+	motionDetectActivity();
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		blueToothConfigurationSystem();
 	}
 }
 
-void isMotionDetect()
+void motionDetectActivity()
 {
 	if (_isDisableCall || _findOutPhonesMode == 2 || _isPIRSensorActivated) { 
 		_isOnMotionDetect = false;
