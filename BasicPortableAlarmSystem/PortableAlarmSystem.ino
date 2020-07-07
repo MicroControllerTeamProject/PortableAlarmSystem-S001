@@ -262,26 +262,12 @@ void initilizeEEPromData()
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
 
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _phoneNumber, BUFSIZEPHONENUMBER);
-	//_phoneNumber = String(_bufPhoneNumber);
-
+	
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumberAlternative, _phoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
-	//_phoneNumberAlternative = String(_bufPhoneNumberAlternative);
-
+	
 	eepromRW->eeprom_read_string(_addressDBPhoneIsON, _bufDbPhoneON, BUFSIZEDBPHONEON);
 	_phoneNumbers = atoi(&_bufDbPhoneON[0]);
 
-	//eepromRW->eeprom_read_string(_addressStartBTSleepIsON, _bufBTSleepIsON, BUFSIZEBTSLEEPISON);
-
-	//_isBTSleepON = atoi(&_bufBTSleepIsON[0]);
-
-	/*eepromRW->eeprom_read_string(_addressStartFindMode, _bufFindMode, BUFSIZEFINDMODE);
-
-	_findMode = atoi(&_bufFindMode[0]);*/
-
-	/*eepromRW->eeprom_read_string(_addressStartBufTemperatureIsOn, _bufTemperatureIsOn, BUFSIZETEMPERATUREISON);
-
-	_isTemperatureCheckOn = atoi(&_bufTemperatureIsOn[0]);
-*/
 	eepromRW->eeprom_read_string(_addressStartFindOutPhonesON, _bufFindOutPhonesON, BUFSIZEFINDOUTPHONESON);
 	_findOutPhonesMode = atoi(&_bufFindOutPhonesON[0]);
 
@@ -1416,6 +1402,7 @@ void listOfSmsCommands(String command)
 	//{
 	//	_isPositionEnable = false;
 	//}
+
 	//Attiva funzione non vedermi
 	if (command == F("Nv"))
 	{
@@ -1424,14 +1411,12 @@ void listOfSmsCommands(String command)
 		_timeAfterPowerOnForBTFinder = 0;
 		isFindOutPhonesONAndSetBluetoothInMasterMode();
 	}
-
 	//Attiva External interrupt
 	if (command == F("Ex"))
 	{
 		_isExternalInterruptOn = 1;
 		callSim900();
 	}
-
 	//Disattiva External interrupt
 	if (command == F("Ey"))
 	{
@@ -1444,7 +1429,15 @@ void listOfSmsCommands(String command)
 		_isBTSleepON = true;
 		_isPIRSensorActivated = 0;
 		_findOutPhonesMode = 0;
+		_isBuzzerOn = 0;
 		activateFunctionAlarm();
+	}
+
+	//Attiva Buzzer
+	if (command == F("Bz"))
+	{
+		_isBuzzerOn = 1;
+		callSim900();
 	}
 
 	//Attiva pir sensor senza bluetooth
@@ -1453,6 +1446,7 @@ void listOfSmsCommands(String command)
 		_isBTSleepON = true;
 		_isPIRSensorActivated = 1;
 		_findOutPhonesMode = 0;
+		_isBuzzerOn = 0;
 		activateFunctionAlarm();
 	}
 
