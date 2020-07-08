@@ -1455,6 +1455,7 @@ void listOfSmsCommands(String command)
 	{
 		_isBTSleepON = false;
 		_findOutPhonesMode = 2;
+		_isPIRSensorActivated = 0;
 		activateFunctionAlarm();
 	}
 }
