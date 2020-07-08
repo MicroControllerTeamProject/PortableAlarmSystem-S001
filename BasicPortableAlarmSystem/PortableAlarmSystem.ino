@@ -20,6 +20,7 @@ ActivityManager* _delayForTemperature = new ActivityManager(60);
 ActivityManager* _delayForVoltage = new ActivityManager(60);
 
 //ActivityManager* _delayForGetCoordinates= new ActivityManager(120);
+
 //ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
 ActivityManager* _delayForSignalStrength = new ActivityManager(30);
@@ -142,9 +143,9 @@ unsigned long _millsStart = 0;
 
 bool _isMasterMode = false;
 
-unsigned long _timeToTurnOfBTAfterPowerOn = 300000;
+unsigned long _timeToTurnOfBTAfterPowerOn = millis() + 300000;
 
-unsigned long _timeAfterPowerOnForBTFinder = 300000;
+unsigned long _timeAfterPowerOnForBTFinder = millis() + 300000;
 
 String _apn = "";
 
@@ -737,35 +738,25 @@ void blueToothConfigurationSystem()
 #pragma region Main Menu-#0
 		if (_bluetoothData.indexOf(F("#0")) > -1)
 		{
+			_timeToTurnOfBTAfterPowerOn = millis() + 300000;
+			_timeAfterPowerOnForBTFinder = millis() + 300000;
 			loadMainMenu();
 		}
-
 
 #pragma region Commands
 
 		if (_bluetoothData.indexOf(F("C002")) > -1)
 		{
-			//do something
-			//digitalWrite(_pin_powerLed, HIGH);
 			_isAlarmOn = true;
 			_isOnMotionDetect = false;
 			_timeAfterPowerOnForBTFinder = 0;
 			_timeToTurnOfBTAfterPowerOn = 0;
-			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm ON"), BlueToothCommandsUtil::Title));
-		/*	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm ON"), BlueToothCommandsUtil::Message));
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));*/
 			loadMainMenu();
 		}
 
 		if (_bluetoothData.indexOf(F("C003")) > -1)
 		{
-			//do something
 			_isAlarmOn = false;
-
-			//digitalWrite(_pin_powerLed, LOW);
-			//btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Portable Alarm OFF"), BlueToothCommandsUtil::Title));
-		/*	btSerial->println(BlueToothCommandsUtil::CommandConstructor(F("Alarm OFF"), BlueToothCommandsUtil::Message));
-			btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));*/
 			loadMainMenu();
 		}
 #pragma endregion
@@ -782,6 +773,8 @@ void blueToothConfigurationSystem()
 #pragma region Configuration Menu-#M001
 		if (_bluetoothData.indexOf(F("M001")) > -1)
 		{
+			_timeToTurnOfBTAfterPowerOn = 300000;
+			_timeAfterPowerOnForBTFinder = 300000;
 			loadConfigurationMenu();
 		}
 #pragma region Commands
@@ -795,12 +788,8 @@ void blueToothConfigurationSystem()
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
 			if (isValidNumber(splitString))
 			{
-				/*const int BUFSIZEPHONENUMBER = 11;
-				char _bufPhoneNumber[BUFSIZEPHONENUMBER];*/
-
 				splitString.toCharArray(_phoneNumber, BUFSIZEPHONENUMBER);
 				eepromRW->eeprom_write_string(1, _phoneNumber);
-				//_phoneNumber = splitString;
 			}
 			loadConfigurationMenu();
 		}
@@ -810,9 +799,6 @@ void blueToothConfigurationSystem()
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
 			if (isValidNumber(splitString))
 			{
-				/*const int BUFSIZEDBPHONEON = 2;
-				char _bufDbPhoneON[BUFSIZEDBPHONEON];*/
-
 				splitString.toCharArray(_bufDelayFindMe, BUFSIZEDEVICEADDRESS);
 				eepromRW->eeprom_write_string(_addressDelayFindMe, _bufDelayFindMe);
 				_delayFindMe = atoi(&_bufDelayFindMe[0]);
