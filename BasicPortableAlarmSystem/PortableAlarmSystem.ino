@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 3.80-beta";
+char version[15] = "S001 4.00-beta";
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -93,7 +93,7 @@ bool _isDisableCall = false;
 
 bool _isOnMotionDetect = false;
 
-bool _isFirstTilt = true;
+//bool _isFirstTilt = true;
 
 bool _isPositionEnable = false;
 
@@ -139,13 +139,15 @@ float _voltageValue = 0;
 
 float _voltageMinValue = 0;
 
-unsigned long _millsStart = 0;
+//unsigned long _millsStart = 0;
 
 bool _isMasterMode = false;
 
-unsigned long _timeToTurnOfBTAfterPowerOn = millis() + 300000;
+unsigned long _timeToTurnOnAlarm = millis() + 300000;
 
-unsigned long _timeAfterPowerOnForBTFinder = millis() + 300000;
+//unsigned long _timeToTurnOfBTAfterPowerOn = millis() + 300000;
+//
+//unsigned long _timeAfterPowerOnForBTFinder = millis() + 300000;
 
 String _apn = "";
 
@@ -364,7 +366,7 @@ void getSignalStrength()
 void turnOffBluetoohIfTimeIsOver()
 {
 	if (_findOutPhonesMode == 0
-		&& (millis() > _timeToTurnOfBTAfterPowerOn)
+		&& (millis() > _timeToTurnOnAlarm)
 		&& btSerial->isBlueToothOn()
 		&& _isBTSleepON
 		)
@@ -389,16 +391,16 @@ void turnOffBluetoohIfTimeIsOver()
 //	}
 //}
 
-bool isFindOutPhonesONAndSetBluetoothInMasterMode()
+bool findOutPhonesONAndSetBluetoothInMasterModeActivity()
 {
 	if (_isDisableCall) { return; }
 
-	if ((_findOutPhonesMode == 1 || _findOutPhonesMode == 2) && (millis() > _timeAfterPowerOnForBTFinder))
+	if ((_findOutPhonesMode == 1 || _findOutPhonesMode == 2) && _isAlarmOn)
 	{
-		if (_findOutPhonesMode == 1 && !_isAlarmOn)
+		/*if (_findOutPhonesMode == 1 && !_isAlarmOn)
 		{
 			_isAlarmOn = true;
-		}
+		}*/
 
 		if (_isMasterMode == false)
 		{
@@ -439,6 +441,11 @@ bool isFindOutPhonesONAndSetBluetoothInMasterMode()
 
 void loop()
 {
+	if ((millis() > _timeToTurnOnAlarm))
+	{
+		_isAlarmOn = true;
+	}
+
 	if (!(_isOnMotionDetect && _isAlarmOn))
 	{
 		readIncomingSMS();
@@ -454,7 +461,7 @@ void loop()
 		/*	if (_delayForFindPhone->IsDelayTimeFinished(true))
 			{*/
 			//Serial.println("Sto cercando");
-		isFindOutPhonesONAndSetBluetoothInMasterMode();
+		findOutPhonesONAndSetBluetoothInMasterModeActivity();
 		//}
 	}
 	//if (_delayForCallNumbers->IsDelayTimeFinished(true))
@@ -507,13 +514,13 @@ void motionDetectActivity()
 		_isOnMotionDetect = false;
 		return;
 	}
-	if ((millis() - _millsStart) > _sensitivityAlarm)
-	{
-		_millsStart = 0;
-		_isFirstTilt = true;
-	}
+	//if ((millis() - _millsStart) > _sensitivityAlarm)
+	//{
+	//	_millsStart = 0;
+	//	_isFirstTilt = true;
+	//}
 
-	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && !digitalRead(3))) //&& !isOnConfiguration)									 /*if(true)*/
+	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && !digitalRead(3)))								 /*if(true)*/
 	{
 		blinkLed();
 
@@ -547,7 +554,7 @@ void motionDetectActivity()
 
 		readIncomingSMS();
 
-		isFindOutPhonesONAndSetBluetoothInMasterMode();
+		findOutPhonesONAndSetBluetoothInMasterModeActivity();
 
 		EIFR |= 1 << INTF1; //clear external interrupt 1
 		EIFR |= 1 << INTF0; //clear external interrupt 0
@@ -575,8 +582,7 @@ void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
 	{
 		btSerial->ReceveMode();
 		btSerial->turnOnBlueTooth();
-		_timeToTurnOfBTAfterPowerOn = millis() + 300000;
-		_timeAfterPowerOnForBTFinder = millis() + 120000;
+		_timeToTurnOnAlarm = millis() + 300000;
 	}
 	_isMasterMode = false;
 }
@@ -738,8 +744,7 @@ void blueToothConfigurationSystem()
 #pragma region Main Menu-#0
 		if (_bluetoothData.indexOf(F("#0")) > -1)
 		{
-			_timeToTurnOfBTAfterPowerOn = millis() + 300000;
-			_timeAfterPowerOnForBTFinder = millis() + 300000;
+			_timeToTurnOnAlarm = millis() + 300000;
 			loadMainMenu();
 		}
 
@@ -749,8 +754,7 @@ void blueToothConfigurationSystem()
 		{
 			_isAlarmOn = true;
 			_isOnMotionDetect = false;
-			_timeAfterPowerOnForBTFinder = 0;
-			_timeToTurnOfBTAfterPowerOn = 0;
+			_timeToTurnOnAlarm = 0;
 			loadMainMenu();
 		}
 
@@ -773,8 +777,7 @@ void blueToothConfigurationSystem()
 #pragma region Configuration Menu-#M001
 		if (_bluetoothData.indexOf(F("M001")) > -1)
 		{
-			_timeToTurnOfBTAfterPowerOn = 300000;
-			_timeAfterPowerOnForBTFinder = 300000;
+			_timeToTurnOnAlarm = millis() + 300000;
 			loadConfigurationMenu();
 		}
 #pragma region Commands
@@ -1250,8 +1253,8 @@ void listOfSmsCommands(String command)
 	{
 		_findOutPhonesMode = 1;
 		_isBTSleepON = false;
-		_timeAfterPowerOnForBTFinder = 0;
-		isFindOutPhonesONAndSetBluetoothInMasterMode();
+		_timeToTurnOnAlarm = 0;
+		findOutPhonesONAndSetBluetoothInMasterModeActivity();
 	}
 	//Attiva External interrupt
 	if (command == F("Ex"))
@@ -1305,8 +1308,7 @@ void listOfSmsCommands(String command)
 
 void activateFunctionAlarm()
 {
-	_timeToTurnOfBTAfterPowerOn = 0;
-	_timeAfterPowerOnForBTFinder = 0;
+	_timeToTurnOnAlarm = 0;
 	_isDisableCall = false;
 	_isAlarmOn = true;
 	callSim900();
