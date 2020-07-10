@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 4.00-beta";
+char version[15] = "S001 4.50-beta";
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -149,7 +149,7 @@ unsigned long _timeToTurnOnAlarm = millis() + 300000;
 //
 //unsigned long _timeAfterPowerOnForBTFinder = millis() + 300000;
 
-String _apn = "";
+//String _apn = "";
 
 bool _isDeviceDetected = false;
 
