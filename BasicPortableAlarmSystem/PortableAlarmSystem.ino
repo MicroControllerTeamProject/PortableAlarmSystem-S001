@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 4.60-beta";
+char version[15] = "S001 4.80-beta";
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -541,9 +541,9 @@ void motionDetectActivity()
 		//}
 		////}
 
-		readIncomingSMS();
+	/*	readIncomingSMS();
 
-		findOutPhonesONAndSetBluetoothInMasterModeActivity();
+		findOutPhonesONAndSetBluetoothInMasterModeActivity();*/
 
 		EIFR |= 1 << INTF1; //clear external interrupt 1
 		EIFR |= 1 << INTF0; //clear external interrupt 0
