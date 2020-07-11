@@ -45,6 +45,8 @@ const byte _pin_rxSIM900 = 7;
 
 const byte _pin_txSIM900 = 8;
 
+const byte _pin_reedRelay = A4;
+
 #pragma endregion pinsDefinition
 
 const byte _addressStartBufPhoneNumber = 1;
@@ -93,8 +95,6 @@ bool _isDisableCall = false;
 
 bool _isOnMotionDetect = false;
 
-//bool _isFirstTilt = true;
-
 bool _isPositionEnable = false;
 
 unsigned long _sensitivityAlarm;
@@ -139,15 +139,9 @@ float _voltageValue = 0;
 
 float _voltageMinValue = 0;
 
-//unsigned long _millsStart = 0;
-
 bool _isMasterMode = false;
 
 unsigned long _timeToTurnOnAlarm = millis() + 300000;
-
-//unsigned long _timeToTurnOfBTAfterPowerOn = millis() + 300000;
-//
-//unsigned long _timeAfterPowerOnForBTFinder = millis() + 300000;
 
 //String _apn = "";
 
@@ -249,7 +243,6 @@ void setup()
 	}*/
 
 	pinMode(_pin_pir, INPUT_PULLUP);
-	//pinMode(A4, INPUT_PULLUP);
 
 	blinkLed();
 }
@@ -259,9 +252,9 @@ void initilizeEEPromData()
 	LSG_EEpromRW* eepromRW = new LSG_EEpromRW();
 
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumber, _phoneNumber, BUFSIZEPHONENUMBER);
-	
+
 	eepromRW->eeprom_read_string(_addressStartBufPhoneNumberAlternative, _phoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
-	
+
 	eepromRW->eeprom_read_string(_addressDBPhoneIsON, _bufDbPhoneON, BUFSIZEDBPHONEON);
 	_phoneNumbers = atoi(&_bufDbPhoneON[0]);
 
@@ -391,52 +384,52 @@ void turnOffBluetoohIfTimeIsOver()
 //	}
 //}
 
-bool findOutPhonesONAndSetBluetoothInMasterModeActivity()
+void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 {
 	if (_isDisableCall) { return; }
 
-	if ((_findOutPhonesMode == 1 || _findOutPhonesMode == 2) && _isAlarmOn)
-	{
-		/*if (_findOutPhonesMode == 1 && !_isAlarmOn)
+	/*if ((_findOutPhonesMode == 1 || _findOutPhonesMode == 2) && _isAlarmOn)
+	{*/
+	/*	if (_findOutPhonesMode == 1 && !_isAlarmOn)
 		{
 			_isAlarmOn = true;
 		}*/
 
-		if (_isMasterMode == false)
-		{
-			btSerial->Reset_To_Master_Mode();
-			_isMasterMode = true;
-		}
-
-		for (uint8_t i = 0; i < _delayFindMe; i++)
-		{
-			_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
-			if (_isDeviceDetected) { break; }
-			if (_findOutPhonesMode == 1)
-			{
-				_deviceAddress2.trim();
-				_deviceName2.trim();
-				if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1) {
-					_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
-					if (_isDeviceDetected) { break; };
-				}
-			}
-		}
-		if (_isDeviceDetected)
-		{
-			blinkLed();
-			//reedRelaySensorActivity(A2);
-		}
-		else
-		{
-			if (_findOutPhonesMode == 2)
-			{
-				callSim900();
-				_isMasterMode = false;
-			}
-		}
-		return _isDeviceDetected;
+	if (_isMasterMode == false)
+	{
+		btSerial->Reset_To_Master_Mode();
+		_isMasterMode = true;
 	}
+
+	for (uint8_t i = 0; i < _delayFindMe; i++)
+	{
+		_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
+		if (_isDeviceDetected) { break; }
+		if (_findOutPhonesMode == 1)
+		{
+			_deviceAddress2.trim();
+			_deviceName2.trim();
+			if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1) {
+				_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
+				if (_isDeviceDetected) { break; };
+			}
+		}
+	}
+	if (_isDeviceDetected)
+	{
+		blinkLed();
+		//reedRelaySensorActivity(_pin_reedRelay);
+	}
+	else
+	{
+		if (_findOutPhonesMode == 2)
+		{
+			callSim900();
+			_isMasterMode = false;
+		}
+	}
+	//return _isDeviceDetected;
+	//}
 }
 
 void loop()
@@ -456,13 +449,9 @@ void loop()
 		getSignalStrength();
 	}
 
-	if ((!(_isOnMotionDetect && _isAlarmOn)) || _findOutPhonesMode == 2)
+	if ((_isAlarmOn && _findOutPhonesMode == 1) || _findOutPhonesMode == 2)
 	{
-		/*	if (_delayForFindPhone->IsDelayTimeFinished(true))
-			{*/
-			//Serial.println("Sto cercando");
 		findOutPhonesONAndSetBluetoothInMasterModeActivity();
-		//}
 	}
 	//if (_delayForCallNumbers->IsDelayTimeFinished(true))
 	//{
@@ -1118,7 +1107,7 @@ void pirSensorActivity()
 					}
 					callSim900();
 					_isMasterMode = false;
-					//reedRelaySensorActivity(A4);
+					//reedRelaySensorActivity(_pin_reedRelay);
 				}
 			}
 			else
