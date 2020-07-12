@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 4.80-beta";
+char version[15] = "S001 4.90-beta";
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -541,6 +541,8 @@ void motionDetectActivity()
 		//}
 		////}
 
+		readIncomingSMS();
+
 	/*	readIncomingSMS();
 
 		findOutPhonesONAndSetBluetoothInMasterModeActivity();*/
@@ -572,6 +574,7 @@ void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
 		btSerial->ReceveMode();
 		btSerial->turnOnBlueTooth();
 		_timeToTurnOnAlarm = millis() + 300000;
+		_isAlarmOn = false;
 	}
 	_isMasterMode = false;
 }
