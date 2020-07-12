@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 4.90-beta";
+char version[15] = "S001 5.10-beta";
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -449,7 +449,7 @@ void loop()
 		getSignalStrength();
 	}
 
-	if ((_isAlarmOn && _findOutPhonesMode == 1) || _findOutPhonesMode == 2)
+	if (_isAlarmOn && (_findOutPhonesMode == 1 || _findOutPhonesMode == 2))
 	{
 		findOutPhonesONAndSetBluetoothInMasterModeActivity();
 	}
@@ -543,9 +543,9 @@ void motionDetectActivity()
 
 		readIncomingSMS();
 
-	/*	readIncomingSMS();
+		/*	readIncomingSMS();
 
-		findOutPhonesONAndSetBluetoothInMasterModeActivity();*/
+			findOutPhonesONAndSetBluetoothInMasterModeActivity();*/
 
 		EIFR |= 1 << INTF1; //clear external interrupt 1
 		EIFR |= 1 << INTF0; //clear external interrupt 0
@@ -565,17 +565,17 @@ void motionDetectActivity()
 //	btSerial->ReceveMode();
 //}
 
-void turnOnBlueToothAndSetTurnOffTimer(bool isFromSMS)
+void turnOnBlueToothAndSetTurnOffTimer()
 {
 	Serial.flush();
 	btSerial->Reset_To_Slave_Mode();
-	if (_findOutPhonesMode == 0 || isFromSMS)
-	{
-		btSerial->ReceveMode();
-		btSerial->turnOnBlueTooth();
-		_timeToTurnOnAlarm = millis() + 300000;
-		_isAlarmOn = false;
-	}
+	//if (_findOutPhonesMode == 0 || isFromSMS)
+	//{
+	btSerial->ReceveMode();
+	btSerial->turnOnBlueTooth();
+	_timeToTurnOnAlarm = millis() + 300000;
+	_isAlarmOn = false;
+	//	}
 	_isMasterMode = false;
 }
 
@@ -1216,7 +1216,7 @@ void listOfSmsCommands(String command)
 	//Accende bluetooth
 	if (command == F("Ab"))
 	{
-		turnOnBlueToothAndSetTurnOffTimer(true);
+		turnOnBlueToothAndSetTurnOffTimer();
 	}
 	//Accende led
 	if (command == F("Al"))
