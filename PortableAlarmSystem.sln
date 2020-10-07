@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PortableAlarmSystem", "BasicPortableAlarmSystem\BasicPortableAlarmSystem.vcxproj", "{ACD1CD00-2D74-4298-85AA-96284F0E90C9}"
 EndProject
@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		Documents\PortableAlarm.docx = Documents\PortableAlarm.docx
 		Documents\Richiesta.txt = Documents\Richiesta.txt
 		Documents\Speek.docx = Documents\Speek.docx
+		Documents\usb-Pins.png = Documents\usb-Pins.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{20BCCE20-C908-48F6-BD16-AC2749927EDB}"
