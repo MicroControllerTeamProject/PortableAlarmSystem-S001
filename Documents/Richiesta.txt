@@ -16,3 +16,5 @@ BF,A7,F46261		X7						 phone watch.
 
 Alternative ----    005A,13,389DC0
 
+AT+RNAME?005A,13,389DC0
+
