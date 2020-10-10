@@ -15,6 +15,8 @@
 
 char version[15] = "S001 5.20-beta";
 
+//Library version : 5.20-beta
+
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
 ActivityManager* _delayForVoltage = new ActivityManager(60);
