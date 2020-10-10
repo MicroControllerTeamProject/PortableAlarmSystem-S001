@@ -311,6 +311,8 @@ void inizializeInterrupts()
 
 void callSim900()
 {
+	//Serial.println("Faccio chiamata");
+
 	if (_isDisableCall) { return; }
 
 	char phoneNumber[14];
@@ -404,14 +406,20 @@ void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 	for (uint8_t i = 0; i < _delayFindMe; i++)
 	{
 		_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
-		if (_isDeviceDetected) { break; }
+		if (_isDeviceDetected) { 
+			break; 
+			//Serial.println("Find first BT");
+		}
 		if (_findOutPhonesMode == 1)
 		{
 			_deviceAddress2.trim();
 			_deviceName2.trim();
 			if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1) {
 				_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
-				if (_isDeviceDetected) { break; };
+				if (_isDeviceDetected) { 
+					//Serial.println("Find second BT");
+					break; 
+				};
 			}
 		}
 	}

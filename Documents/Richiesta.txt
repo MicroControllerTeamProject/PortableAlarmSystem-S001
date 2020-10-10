@@ -14,6 +14,9 @@ BF,A7,F46261		X7						 phone watch.
 5A,13,389DC0		PhoneAccess001			Mate S.
 
 
+Telefono Maria : d017,c2,190130
+
+
 Alternative ----    005A,13,389DC0
 
 AT+RNAME?005A,13,389DC0
