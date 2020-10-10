@@ -757,6 +757,7 @@ void blueToothConfigurationSystem()
 			_isAlarmOn = true;
 			_isOnMotionDetect = false;
 			_timeToTurnOnAlarm = 0;
+			_isDisableCall = false;
 			loadMainMenu();
 		}
 
