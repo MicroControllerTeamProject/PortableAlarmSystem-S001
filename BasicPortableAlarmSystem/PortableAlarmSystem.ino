@@ -444,15 +444,17 @@ void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 
 void loop()
 {
+	readIncomingSMS();
+
 	if ((millis() > _timeToTurnOnAlarm))
 	{
 		_isAlarmOn = true;
 	}
 
-	if (!(_isOnMotionDetect && _isAlarmOn))
-	{
-		readIncomingSMS();
-	}
+	//if (!(_isOnMotionDetect && _isAlarmOn))
+	//{
+	//	readIncomingSMS();
+	//}
 
 	if (_delayForSignalStrength->IsDelayTimeFinished(true))
 	{
@@ -551,7 +553,7 @@ void motionDetectActivity()
 		//}
 		////}
 
-		readIncomingSMS();
+		//readIncomingSMS();
 
 		/*	readIncomingSMS();
 
