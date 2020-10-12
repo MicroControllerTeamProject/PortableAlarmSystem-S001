@@ -520,7 +520,7 @@ void motionDetectActivity()
 	//	_millsStart = 0;
 	//	_isFirstTilt = true;
 	//}
-
+	                                         
 	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && !digitalRead(3)))								 /*if(true)*/
 	{
 		blinkLed();
@@ -1265,6 +1265,7 @@ void listOfSmsCommands(String command)
 	if (command == F("Ex"))
 	{
 		_isExternalInterruptOn = 1;
+		_isAlarmOn = true;
 		callSim900();
 	}
 	//Disattiva External interrupt
