@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 5.20-beta";
+char version[15] = "S001 5.30-beta";
 
 //Library version : 5.20-beta
 
