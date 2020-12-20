@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 5.30-beta";
+char version[15] = "S001 6.00-RTM";
 
 //Library version : 5.20-beta
 
@@ -247,6 +247,8 @@ void setup()
 	pinMode(_pin_pir, INPUT_PULLUP);
 
 	blinkLed();
+
+	//Serial.println(btSerial->getVersion());
 }
 
 void initilizeEEPromData()
