@@ -278,10 +278,10 @@ void initilizeEEPromData()
 	_deviceName = String(_bufDeviceName);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress2, _bufDeviceAddress2, BUFSIZEDEVICEADDRESS);
-	_deviceAddress2 = String(_bufDeviceAddress2);
+	_deviceAddress2 = "1DBF,A7,F46261";// String(_bufDeviceAddress2);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName2, _bufDeviceName2, BUFSIZEDEVICENAME);
-	_deviceName2 = String(_bufDeviceName2);
+	_deviceName2 = "X7";//String(_bufDeviceName2);
 
 	/*eepromRW->eeprom_read_string(_addressApn, _bufApn, BUFSIZEAPN);
 	_apn = String(_bufApn);
@@ -414,8 +414,8 @@ void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 			break; 
 			//Serial.println("Find first BT");
 		}
-		if (_findOutPhonesMode == 1)
-		{
+	/*	if (_findOutPhonesMode == 1)
+		{*/
 			_deviceAddress2.trim();
 			_deviceName2.trim();
 			if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1) {
@@ -425,7 +425,7 @@ void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 					break; 
 				};
 			}
-		}
+		//}
 	}
 	if (_isDeviceDetected)
 	{
