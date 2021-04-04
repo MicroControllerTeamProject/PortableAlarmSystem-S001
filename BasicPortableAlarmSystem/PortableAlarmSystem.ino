@@ -13,9 +13,9 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 6.00-RTM";
+char version[15] = "S001 6.01-RTM";
 
-//Library version : 5.20-beta
+//Library version : 6.01-RTM
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -278,10 +278,10 @@ void initilizeEEPromData()
 	_deviceName = String(_bufDeviceName);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress2, _bufDeviceAddress2, BUFSIZEDEVICEADDRESS);
-	_deviceAddress2 = "1DBF,A7,F46261";// String(_bufDeviceAddress2);
+	_deviceAddress2 = "";// String(_bufDeviceAddress2);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName2, _bufDeviceName2, BUFSIZEDEVICENAME);
-	_deviceName2 = "X7";//String(_bufDeviceName2);
+	_deviceName2 = "";//String(_bufDeviceName2);
 
 	/*eepromRW->eeprom_read_string(_addressApn, _bufApn, BUFSIZEAPN);
 	_apn = String(_bufApn);
