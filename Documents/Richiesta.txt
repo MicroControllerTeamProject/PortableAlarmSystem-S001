@@ -9,9 +9,9 @@ Monta onboard,per ora,un arduino nano e pertanto cambiando il software,cosa che 
 
 
 
-1DBF,A7,F46261		X7						 phone watch.
+1D	BF,A7,F46261		X7						 phone watch.
 
-005A,13,389DC0		PhoneAccess001			Mate S.
+00	5A,13,389DC0		PhoneAccess001			Mate S.
 
 FFFF,C4,0CC034		iTAG
 
@@ -22,4 +22,8 @@ Telefono Maria : d017,c2,190130
 Alternative ----    005A,13,389DC0
 
 AT+RNAME?005A,13,389DC0
+
+DC	72,9B,2E6EB0	PhoneAccess003		2 cell Luigi.
+
+F8	F1,E6,A13226	PhoneAccess004		Davide nuovo.
 

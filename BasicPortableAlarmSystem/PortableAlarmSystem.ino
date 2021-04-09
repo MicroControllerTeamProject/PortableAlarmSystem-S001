@@ -13,7 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 6.01-RTM";
+char version[15] = "S001 6.50-RTM";
 
 //Library version : 6.01-RTM
 
@@ -272,16 +272,16 @@ void initilizeEEPromData()
 	_tempMax = atoi(_bufTemperatureMax);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress, _bufDeviceAddress, BUFSIZEDEVICEADDRESS);
-	_deviceAddress = "00" + String(_bufDeviceAddress);
+	_deviceAddress = "005A,13,389DC0";// +String(_bufDeviceAddress);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName, _bufDeviceName, BUFSIZEDEVICENAME);
-	_deviceName = String(_bufDeviceName);
+	_deviceName = "PhoneAccess001";//String(_bufDeviceName);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress2, _bufDeviceAddress2, BUFSIZEDEVICEADDRESS);
-	_deviceAddress2 = "";// String(_bufDeviceAddress2);
+	_deviceAddress2 = "0019,09,037A0D";// +String(_bufDeviceAddress2);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName2, _bufDeviceName2, BUFSIZEDEVICENAME);
-	_deviceName2 = "";//String(_bufDeviceName2);
+	_deviceName2 = "portablePcb";// String(_bufDeviceName2);
 
 	/*eepromRW->eeprom_read_string(_addressApn, _bufApn, BUFSIZEAPN);
 	_apn = String(_bufApn);
@@ -393,6 +393,11 @@ void turnOffBluetoohIfTimeIsOver()
 void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 {
 	if (_isDisableCall) { return; }
+	//todo:da mettere in altro luogo.
+	_deviceAddress.trim();
+	_deviceName.trim();
+	_deviceAddress2.trim();
+	_deviceName2.trim();
 
 	/*if ((_findOutPhonesMode == 1 || _findOutPhonesMode == 2) && _isAlarmOn)
 	{*/
@@ -409,16 +414,17 @@ void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 
 	for (uint8_t i = 0; i < _delayFindMe; i++)
 	{
-		_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
-		if (_isDeviceDetected) { 
-			break; 
-			//Serial.println("Find first BT");
+		if (_phoneNumbers == 1) {
+			_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress, _deviceName);
+			if (_isDeviceDetected) {
+				break;
+				//Serial.println("Find first BT");
+			}
 		}
 	/*	if (_findOutPhonesMode == 1)
 		{*/
-			_deviceAddress2.trim();
-			_deviceName2.trim();
-			if (_deviceAddress2.length() > 1 && _deviceName2.length() > 1) {
+			
+			if (_phoneNumbers == 2) {
 				_isDeviceDetected = btSerial->IsDeviceDetected(_deviceAddress2, _deviceName2);
 				if (_isDeviceDetected) { 
 					//Serial.println("Find second BT");
