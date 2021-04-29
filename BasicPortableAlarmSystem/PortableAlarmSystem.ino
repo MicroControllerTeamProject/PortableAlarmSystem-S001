@@ -859,13 +859,22 @@ void blueToothConfigurationSystem()
 		if (_bluetoothData.indexOf(F("D099")) > -1)
 		{
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
-			if (isValidNumber(splitString))
+
+			if (isValidNumber(splitString) || splitString == "#")
 			{
-				splitString.toCharArray(_phoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
+				if (splitString == "#")
+				{
+					_phoneNumberAlternative[0] = '\0';
+				}
+				else
+				{
+					splitString.toCharArray(_phoneNumberAlternative, BUFSIZEPHONENUMBERALTERANATIVE);
+				}
 				eepromRW->eeprom_write_string(_addressStartBufPhoneNumberAlternative, _phoneNumberAlternative);
 			}
 			loadConfigurationMenu();
 		}
+
 		if (_bluetoothData.indexOf(F("D004")) > -1)
 		{
 			String splitString = splitStringIndex(_bluetoothData, ';', 1);
