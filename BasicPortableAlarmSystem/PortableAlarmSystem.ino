@@ -1278,6 +1278,7 @@ void listOfSmsCommands(String command)
 		_isBuzzerOn = 0;
 		_isExternalInterruptOn = 1;
 		activateFunctionAlarm();
+		btSerial->turnOffBlueTooth();
 	}
 	//Disattiva External interrupt
 	if (command == F("Ey"))
@@ -1293,6 +1294,7 @@ void listOfSmsCommands(String command)
 		_findOutPhonesMode = 0;
 		_isBuzzerOn = 0;
 		activateFunctionAlarm();
+		btSerial->turnOffBlueTooth();
 	}
 
 	//Attiva Buzzer
@@ -1310,6 +1312,7 @@ void listOfSmsCommands(String command)
 		_findOutPhonesMode = 0;
 		_isBuzzerOn = 0;
 		activateFunctionAlarm();
+		btSerial->turnOffBlueTooth();
 	}
 
 	//Find me
