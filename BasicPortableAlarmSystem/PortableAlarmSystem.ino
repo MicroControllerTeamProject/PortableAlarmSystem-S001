@@ -454,9 +454,12 @@ void loop()
 {
 	readIncomingSMS();
 
-	if ((millis() > _timeToTurnOnAlarm))
+	if ((millis() > _timeToTurnOnAlarm) && _isAlarmOn != true)
 	{
-		_isAlarmOn = true;
+		_isAlarmOn = true; 
+		//digitalWrite(13, HIGH);
+		//delay(5000);
+		//digitalWrite(13, LOW);
 	}
 
 	//if (!(_isOnMotionDetect && _isAlarmOn))
