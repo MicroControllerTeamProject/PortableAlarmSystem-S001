@@ -13,9 +13,9 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
-char version[15] = "S001 6.50-RTM";
+char version[15] = "S001 6.55-RTM";
 
-//Library version : 6.01-RTM
+//Library version : 6.55-RTM
 
 ActivityManager* _delayForTemperature = new ActivityManager(60);
 
@@ -371,9 +371,6 @@ void turnOffBluetoohIfTimeIsOver()
 		)
 	{
 		btSerial->turnOffBlueTooth();
-		digitalWrite(13, HIGH);
-		delay(5000);
-		digitalWrite(13, LOW);
 	}
 }
 
@@ -1241,6 +1238,18 @@ void listOfSmsCommands(String command)
 {
 	//command.trim();
 	//Disattiva chiamate
+
+	if (command == F("Rc"))
+	{
+		mySim900->enableIncomingCall(1);
+	}
+
+	if (command == F("Rs"))
+	{
+		mySim900->disableIncomingCall();
+		callSim900();
+	}
+
 	if (command == F("Dc"))
 	{
 		_isDisableCall = true;
