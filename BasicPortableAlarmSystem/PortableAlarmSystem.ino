@@ -1204,14 +1204,22 @@ void readIncomingSMS()
 		if (response.indexOf("+CMGL:") != -1)
 		{
 			blinkLed();
+			int position = 0;
 
-			//Serial.println(response.substring(51, 61));
-			//Serial.println(response.substring(36, 46));
+			position = response.indexOf('"', position);
+			position = response.indexOf('"', position + 1);
+			position = response.indexOf('"', position + 1);
 
-			if (response.substring(36, 46) != _phoneNumber &&
-				response.substring(51, 61) != _phoneNumber &&
-				response.substring(36, 46) != _phoneNumberAlternative &&
-				response.substring(51, 61) != _phoneNumberAlternative)
+			/*Serial.println(position);
+
+			Serial.println(response.substring(position + 4, position + 14));
+
+			Serial.println(response.substring(position + 19, position + 29));*/
+
+			if (response.substring(position + 4, position + 14) != _phoneNumber &&
+				response.substring(position + 19, position + 29) != _phoneNumber &&
+				response.substring(position + 4, position + 14) != _phoneNumberAlternative &&
+				response.substring(position + 19, position + 29) != _phoneNumberAlternative)
 			{
 				//Serial.println("Numero errato");
 				return;
