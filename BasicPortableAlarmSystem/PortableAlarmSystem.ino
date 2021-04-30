@@ -246,7 +246,7 @@ void setup()
 
 	pinMode(_pin_pir, INPUT_PULLUP);
 
-	blinkLed();
+	blinkLedHideMode();
 
 	//Serial.println(btSerial->getVersion());
 }
@@ -432,7 +432,7 @@ void findOutPhonesONAndSetBluetoothInMasterModeActivity()
 	}
 	if (_isDeviceDetected)
 	{
-		blinkLed();
+		blinkLedHideMode();
 		//reedRelaySensorActivity(_pin_reedRelay);
 	}
 	else
@@ -454,9 +454,6 @@ void loop()
 	if ((millis() > _timeToTurnOnAlarm) && _isAlarmOn != true)
 	{
 		_isAlarmOn = true; 
-		//digitalWrite(13, HIGH);
-		//delay(5000);
-		//digitalWrite(13, LOW);
 	}
 
 	//if (!(_isOnMotionDetect && _isAlarmOn))
@@ -531,7 +528,7 @@ void motionDetectActivity()
 	                                         
 	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && !digitalRead(3)))								 /*if(true)*/
 	{
-		blinkLed();
+		blinkLedHideMode();
 
 		detachInterrupt(0);
 
@@ -599,7 +596,7 @@ void turnOnBlueToothAndSetTurnOffTimer()
 	_isMasterMode = false;
 }
 
-void blinkLed()
+void blinkLedHideMode()
 {
 	if (_isBlueLedDisable) { return; }
 	for (uint8_t i = 0; i < 3; i++)
@@ -608,6 +605,17 @@ void blinkLed()
 		delay(50);
 		digitalWrite(_pin_powerLed, LOW);
 		delay(50);
+	}
+}
+
+void blinkLed(uint8_t blinkDelay,uint8_t numberOfBlinks)
+{
+	for (uint8_t i = 0; i < numberOfBlinks; i++)
+	{
+		digitalWrite(_pin_powerLed, HIGH);
+		delay(blinkDelay);
+		digitalWrite(_pin_powerLed, LOW);
+		delay(blinkDelay);
 	}
 }
 
@@ -1127,7 +1135,7 @@ void pirSensorActivity()
 	{
 		if (digitalRead(_pin_pir))
 		{
-			blinkLed();
+			blinkLedHideMode();
 			_whatIsHappened = F("P");
 
 			if (_findOutPhonesMode == 1)
@@ -1159,9 +1167,7 @@ void pirSensorActivity()
 void reedRelaySensorActivity(uint8_t pin)
 {
 	pinMode(pin, OUTPUT);
-	digitalWrite(pin, HIGH);
-	delay(1000);
-	digitalWrite(pin, LOW);
+	blinkLedHideMode();
 }
 
 void internalTemperatureActivity()
@@ -1212,7 +1218,7 @@ void readIncomingSMS()
 		//if (response.indexOf("+CMT:") != -1)
 		if (response.indexOf("+CMGL:") != -1)
 		{
-			blinkLed();
+			blinkLedHideMode();
 			int position = 0;
 
 			position = response.indexOf('"', position);
@@ -1245,9 +1251,7 @@ void readIncomingSMS()
 
 void listOfSmsCommands(String command)
 {
-	//command.trim();
-	//Disattiva chiamate
-
+	//Enable incoming call.
 	if (command == F("Rc"))
 	{
 		mySim900->enableIncomingCall(1);
@@ -1259,6 +1263,7 @@ void listOfSmsCommands(String command)
 		callSim900();
 	}
 
+	//Disattiva chiamate
 	if (command == F("Dc"))
 	{
 		_isDisableCall = true;
@@ -1267,12 +1272,13 @@ void listOfSmsCommands(String command)
 	if (command == F("Ab"))
 	{
 		turnOnBlueToothAndSetTurnOffTimer();
+		blinkLed(500, 3);
 	}
 	//Accende led
 	if (command == F("Al"))
 	{
 		_isBlueLedDisable = false;
-		callSim900();
+		blinkLed(500,3);
 	}
 	//Check system
 	if (command == F("Ck"))
@@ -1297,6 +1303,7 @@ void listOfSmsCommands(String command)
 		_isBTSleepON = false;
 		_timeToTurnOnAlarm = 0;
 		findOutPhonesONAndSetBluetoothInMasterModeActivity();
+		blinkLed(500, 3);
 	}
 	//Attiva External interrupt
 	if (command == F("Ex"))
@@ -1330,7 +1337,7 @@ void listOfSmsCommands(String command)
 	if (command == F("Bz"))
 	{
 		_isBuzzerOn = 1;
-		callSim900();
+		blinkLed(500,3);
 	}
 
 	//Attiva pir sensor senza bluetooth
