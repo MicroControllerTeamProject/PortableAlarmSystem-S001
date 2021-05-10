@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 6.55-RTM";
+char version[15] = "S001 6.60-RTM";
 
 //Library version : 6.55-RTM
 
