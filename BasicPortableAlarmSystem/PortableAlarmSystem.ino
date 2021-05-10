@@ -13,6 +13,7 @@
 #include "MySim900.h"
 #include "ActivityManager.h"
 
+
 char version[15] = "S001 6.55-RTM";
 
 //Library version : 6.55-RTM
@@ -196,7 +197,7 @@ void setup()
 	mySim900->Begin(19200);
 
 	mySim900->IsCallDisabled(false);
-
+	
 	inizializePins();
 
 	inizializeInterrupts();
@@ -204,6 +205,8 @@ void setup()
 	btSerial = new MyBlueTooth(&Serial, 10, 6, 38400, 9600);
 
 	btSerial->Reset_To_Slave_Mode();
+
+	//mySim900->getCCLK();
 
 	_oldPassword = btSerial->GetPassword();
 
