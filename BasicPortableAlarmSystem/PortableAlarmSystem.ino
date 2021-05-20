@@ -247,7 +247,7 @@ void setup()
 		Serial.println(s);
 	}*/
 
-	pinMode(_pin_pir, INPUT_PULLUP);
+	//pinMode(_pin_pir, INPUT_PULLUP);
 
 	blinkLedHideMode();
 
