@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 6.60-RTM";
+char version[15] = "S001 7.00-RTM";
 
 //Library version : 6.55-RTM
 
@@ -247,7 +247,7 @@ void setup()
 		Serial.println(s);
 	}*/
 
-	//pinMode(_pin_pir, INPUT_PULLUP);
+	pinMode(_pin_pir, INPUT_PULLUP);
 
 	blinkLedHideMode();
 
