@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.00-RTM";
+char version[15] = "S001 7.50-RTM";
 
 //Library version : 6.55-RTM
 
@@ -1254,6 +1254,21 @@ void readIncomingSMS()
 
 void listOfSmsCommands(String command)
 {
+
+	//Enable incoming call.
+	if (command == F("P1"))
+	{
+		_phoneNumbers = 1;
+		callSim900();
+	}
+
+	if (command == F("P2"))
+	{
+		_phoneNumbers = 2;
+		callSim900();
+	}
+
+
 	//Enable incoming call.
 	if (command == F("Rc"))
 	{

@@ -1,6 +1,6 @@
 ﻿Compiling 'PortableAlarmSystem' for 'Arduino/Genuino Uno'
-Program size: 29,302 bytes (used 91% of a 32,256 byte maximum) (4.79 secs)
-Minimum Memory Usage: 1231 bytes (60% of a 2048 byte maximum)
+Program size: 29,498 bytes (used 91% of a 32,256 byte maximum) (5.26 secs)
+Minimum Memory Usage: 1233 bytes (60% of a 2048 byte maximum)
  
 Uploading 'PortableAlarmSystem' to 'Arduino/Genuino Uno' using 'COM12'
 	The upload process has finished.
