@@ -1376,7 +1376,7 @@ void listOfSmsCommands(String command)
 		_isBTSleepON = true;
 		_isPIRSensorActivated = 1;
 		_findOutPhonesMode = 0;
-		_isBuzzerOn = 0;
+	/*	_isBuzzerOn = 0;*/
 		activateFunctionAlarm();
 		btSerial->turnOffBlueTooth();
 	}
