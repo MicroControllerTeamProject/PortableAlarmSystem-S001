@@ -247,6 +247,18 @@ void setup()
 		Serial.println(s);
 	}*/
 
+	delay(1000);
+
+	mySim900->ATCommand("AT+CBAND=""EGSM_MODE""");
+
+	delay(1000);
+
+	if (mySim900->IsAvailable() > 0)
+	{
+		String s = mySim900->ReadIncomingChars2();
+		Serial.println(s);
+	}
+
 	pinMode(_pin_pir, INPUT_PULLUP);
 
 	blinkLedHideMode();
