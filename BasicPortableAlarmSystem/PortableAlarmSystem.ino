@@ -249,14 +249,14 @@ void setup()
 
 	delay(1000);
 
-	mySim900->ATCommand("AT+CBAND=""EGSM_MODE""");
+	mySim900->ATCommand("AT+CBAND=""EGSM_PCS_MODE""");
 
 	delay(1000);
 
 	if (mySim900->IsAvailable() > 0)
 	{
 		String s = mySim900->ReadIncomingChars2();
-		Serial.println(s);
+		//Serial.println(s);
 	}
 
 	pinMode(_pin_pir, INPUT_PULLUP);
