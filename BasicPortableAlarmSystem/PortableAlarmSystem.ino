@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.51-RTM";
+char version[15] = "S001 7.60-RTM";
 
 //Library version : 6.55-RTM
 
@@ -320,6 +320,7 @@ void initilizeEEPromData()
 void inizializePins()
 {
 	pinMode(_pin_powerLed, OUTPUT);
+	pinMode(0, INPUT_PULLUP);
 }
 
 void inizializeInterrupts()
