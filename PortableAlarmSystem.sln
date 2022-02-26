@@ -17,6 +17,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{8AB27E48-E1BF-4462-9648-C192228D4AD8}"
 	ProjectSection(SolutionItems) = preProject
 		Appunti.txt = Appunti.txt
+		Documents\BT3.0Version\HowToDoWith3.0Version.txt = Documents\BT3.0Version\HowToDoWith3.0Version.txt
 		Documents\PortableAlarm.docx = Documents\PortableAlarm.docx
 		Documents\Richiesta.txt = Documents\Richiesta.txt
 		Documents\Speek.docx = Documents\Speek.docx
