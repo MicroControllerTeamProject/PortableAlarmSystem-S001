@@ -1,0 +1,4 @@
+I can use all portable functions,  but  with AT+RNAME? and INQUIRE state i need to set 34pins to HIGH in slave mode and send AT command for INQUIRE PHONE.
+
+https://www.youtube.com/watch?v=90JYo5e9eIk
+
