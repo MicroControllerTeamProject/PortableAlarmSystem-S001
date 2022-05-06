@@ -1,0 +1,1 @@
+1) verificare che sistema dopo tempo x attivi tutti i tipi di allarme;
