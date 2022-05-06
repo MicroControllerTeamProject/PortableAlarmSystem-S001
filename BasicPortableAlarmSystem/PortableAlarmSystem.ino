@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.60-RTM";
+char version[15] = "S001 7.70-RTM";
 
 //Library version : 6.55-RTM
 
@@ -143,6 +143,8 @@ float _voltageValue = 0;
 float _voltageMinValue = 0;
 
 bool _isMasterMode = false;
+
+bool _isExtenalInterruptNormalyClosed = true;
 
 unsigned long _timeToTurnOnAlarm = millis() + 300000;
 
@@ -541,8 +543,8 @@ void motionDetectActivity()
 	//	_millsStart = 0;
 	//	_isFirstTilt = true;
 	//}
-	                                         
-	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && !digitalRead(3)))								 /*if(true)*/
+	
+	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && (_isExtenalInterruptNormalyClosed ^ digitalRead(3))))								 /*if(true)*/
 	{
 		blinkLedHideMode();
 
@@ -1351,6 +1353,11 @@ void listOfSmsCommands(String command)
 	if (command == F("Ey"))
 	{
 		_isExternalInterruptOn = 0;
+	}
+
+	if (command == F("Eo"))
+	{
+		_isExtenalInterruptNormalyClosed = false;
 	}
 
 	//Attiva motion detect senza bluetooth
