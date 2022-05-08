@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.70-RTM";
+char version[15] = "S001 7.80-RTM";
 
 //Library version : 6.55-RTM
 
@@ -97,6 +97,8 @@ bool _isBlueLedDisable = true;
 bool _isDisableCall = false;
 
 bool _isOnMotionDetect = false;
+
+bool _isOnExternalMotionDetect = false;
 
 bool _isPositionEnable = false;
 
@@ -328,7 +330,7 @@ void inizializePins()
 void inizializeInterrupts()
 {
 	attachInterrupt(0, motionTiltInternalInterrupt, RISING);
-	attachInterrupt(1, motionTiltExternalInterrupt, RISING);
+	attachInterrupt(1, motionTiltExternalInterrupt, CHANGE);
 }
 
 void callSim900()
@@ -364,7 +366,7 @@ void callSim900()
 
 void motionTiltExternalInterrupt() {
 	if (_isExternalInterruptOn /*&& !_isPIRSensorActivated*/) {
-		_isOnMotionDetect = true;
+		_isOnExternalMotionDetect = true;
 	}
 }
 
@@ -544,7 +546,13 @@ void motionDetectActivity()
 	//	_isFirstTilt = true;
 	//}
 	
-	if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && (_isExtenalInterruptNormalyClosed ^ digitalRead(3))))								 /*if(true)*/
+	//if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && _isExternalInterruptOn && (_isExtenalInterruptNormalyClosed ^ digitalRead(3))))
+	//if ((_isOnMotionDetect && _isAlarmOn) || (_isAlarmOn && (_isExtenalInterruptNormalyClosed ^ digitalRead(3))) || _isExternalInterruptOn))	/*if(true)*/
+	
+	if (_isAlarmOn && ((_isOnMotionDetect && !_isExternalInterruptOn) 
+		|| _isOnExternalMotionDetect 
+		|| ((_isExtenalInterruptNormalyClosed ^ digitalRead(3)) 
+		&& _isExternalInterruptOn)))
 	{
 		blinkLedHideMode();
 
@@ -588,9 +596,10 @@ void motionDetectActivity()
 		sei();
 
 		attachInterrupt(0, motionTiltInternalInterrupt, RISING);
-		attachInterrupt(1, motionTiltExternalInterrupt, RISING);
+		attachInterrupt(1, motionTiltExternalInterrupt, CHANGE);
 
 		_isOnMotionDetect = false;
+		_isOnExternalMotionDetect = false;
 	}
 }
 
