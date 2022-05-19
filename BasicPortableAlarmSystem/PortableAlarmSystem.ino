@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.80-RTM";
+char version[15] = "S001 7.81-RTM";
 
 //Library version : 6.55-RTM
 
@@ -146,7 +146,7 @@ float _voltageMinValue = 0;
 
 bool _isMasterMode = false;
 
-bool _isExtenalInterruptNormalyClosed = true;
+bool _isExtenalInterruptNormalyClosed = false;
 
 unsigned long _timeToTurnOnAlarm = millis() + 300000;
 
@@ -1366,7 +1366,7 @@ void listOfSmsCommands(String command)
 
 	if (command == F("Eo"))
 	{
-		_isExtenalInterruptNormalyClosed = false;
+		_isExtenalInterruptNormalyClosed = true;
 	}
 
 	//Attiva motion detect senza bluetooth
