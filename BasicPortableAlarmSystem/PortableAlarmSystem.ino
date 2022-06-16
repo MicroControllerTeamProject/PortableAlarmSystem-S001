@@ -231,6 +231,8 @@ void setup()
 
 	_whatIsHappened = F("X");
 
+	mySim900->ATCommand("AT+CNETLIGHT=0");
+
 	mySim900->ATCommand("AT+CPMS=\"SM\"");
 	/*if (mySim900->IsAvailable() > 0)
 	{

@@ -1,6 +1,6 @@
-﻿Compiling 'PortableAlarmSystem' for 'Arduino/Genuino Uno'
-Program size: 29,498 bytes (used 91% of a 32,256 byte maximum) (5.26 secs)
-Minimum Memory Usage: 1233 bytes (60% of a 2048 byte maximum)
+﻿Compiling 'PortableAlarmSystem' for 'ATmega328P (Arduino Nano)'
+Program size: 29,708 bytes (used 97% of a 30,720 byte maximum) (7.94 secs)
+Minimum Memory Usage: 1300 bytes (63% of a 2048 byte maximum)
  
-Uploading 'PortableAlarmSystem' to 'Arduino/Genuino Uno' using 'COM12'
+Uploading 'PortableAlarmSystem' to 'ATmega328P (Arduino Nano)' using 'COM33'
 	The upload process has finished.
