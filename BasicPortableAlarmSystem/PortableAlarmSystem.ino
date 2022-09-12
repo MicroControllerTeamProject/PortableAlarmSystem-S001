@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.81-RTM";
+char version[15] = "S001 7.85-RTM";
 
 //Library version : 6.55-RTM
 
@@ -1241,8 +1241,8 @@ void readIncomingSMS()
 	{
 		String response = mySim900->ReadIncomingChars2();
 		delay(500);
-		//Serial.print("####"); Serial.print(response); Serial.println("####");
 		response.trim();
+		Serial.print("####"); Serial.print(response); Serial.println("####");
 		//if (response.substring(0, 5) == F("+CMT:"))
 		//if (response.indexOf("+CMT:") != -1)
 		if (response.indexOf("+CMGL:") != -1)
@@ -1350,7 +1350,7 @@ void listOfSmsCommands(String command)
 		blinkLed(500, 3);
 	}
 	//Attiva External interrupt
-	if (command == F("Ex"))
+	if (command == F("Eo"))
 	{
 		_isBTSleepON = true;
 		_isPIRSensorActivated = 0;
@@ -1359,15 +1359,23 @@ void listOfSmsCommands(String command)
 		_isExternalInterruptOn = 1;
 		activateFunctionAlarm();
 		btSerial->turnOffBlueTooth();
+		_isExtenalInterruptNormalyClosed = false;
 	}
 	//Disattiva External interrupt
-	if (command == F("Ey"))
+	if (command == F("Ex"))
 	{
 		_isExternalInterruptOn = 0;
 	}
 
-	if (command == F("Eo"))
+	if (command == F("Ec"))
 	{
+		_isBTSleepON = true;
+		_isPIRSensorActivated = 0;
+		_findOutPhonesMode = 0;
+		_isBuzzerOn = 0;
+		_isExternalInterruptOn = 1;
+		activateFunctionAlarm();
+		btSerial->turnOffBlueTooth();
 		_isExtenalInterruptNormalyClosed = true;
 	}
 
