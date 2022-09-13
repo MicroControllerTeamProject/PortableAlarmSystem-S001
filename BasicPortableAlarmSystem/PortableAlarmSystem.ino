@@ -293,16 +293,16 @@ void initilizeEEPromData()
 	_tempMax = atoi(_bufTemperatureMax);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress, _bufDeviceAddress, BUFSIZEDEVICEADDRESS);
-	_deviceAddress = "005A,13,389DC0";// +String(_bufDeviceAddress);
+	_deviceAddress = F("005A,13,389DC0");// +String(_bufDeviceAddress);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName, _bufDeviceName, BUFSIZEDEVICENAME);
-	_deviceName = "PhoneAccess001";//String(_bufDeviceName);
+	_deviceName = F("PhoneAccess001");//String(_bufDeviceName);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceAddress2, _bufDeviceAddress2, BUFSIZEDEVICEADDRESS);
-	_deviceAddress2 = "0019,09,037A0D";// +String(_bufDeviceAddress2);
+	_deviceAddress2 = F("0019,09,037A0D");// +String(_bufDeviceAddress2);
 
 	eepromRW->eeprom_read_string(_addressStartDeviceName2, _bufDeviceName2, BUFSIZEDEVICENAME);
-	_deviceName2 = "portablePcb";// String(_bufDeviceName2);
+	_deviceName2 = F("portablePcb");// String(_bufDeviceName2);
 
 	/*eepromRW->eeprom_read_string(_addressApn, _bufApn, BUFSIZEAPN);
 	_apn = String(_bufApn);
