@@ -26,7 +26,7 @@ ActivityManager* _delayForVoltage = new ActivityManager(60);
 
 //ActivityManager* _delayForFindPhone = new ActivityManager(30); 
 
-ActivityManager* _delayForSignalStrength = new ActivityManager(30);
+//ActivityManager* _delayForSignalStrength = new ActivityManager(30);
 
 MyBlueTooth* btSerial;
 
@@ -483,10 +483,10 @@ void loop()
 	//	readIncomingSMS();
 	//}
 
-	if (_delayForSignalStrength->IsDelayTimeFinished(true))
-	{
-		getSignalStrength();
-	}
+	//if (_delayForSignalStrength->IsDelayTimeFinished(true))
+	//{
+	//	getSignalStrength();
+	//}
 
 	if (_isAlarmOn && (_findOutPhonesMode == 1 || _findOutPhonesMode == 2))
 	{
@@ -728,7 +728,7 @@ void loadMainMenu()
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor("WhatzUp:" + _whatIsHappened, BlueToothCommandsUtil::Info));
 
-	btSerial->println(BlueToothCommandsUtil::CommandConstructor("Signal:" + _signalStrength, BlueToothCommandsUtil::Info));
+	//btSerial->println(BlueToothCommandsUtil::CommandConstructor("Signal:" + _signalStrength, BlueToothCommandsUtil::Info));
 
 	btSerial->println(BlueToothCommandsUtil::CommandConstructor(BlueToothCommandsUtil::EndTrasmission));
 
