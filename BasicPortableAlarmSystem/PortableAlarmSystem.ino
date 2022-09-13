@@ -1242,7 +1242,7 @@ void readIncomingSMS()
 		String response = mySim900->ReadIncomingChars2();
 		delay(500);
 		response.trim();
-		Serial.print("####"); Serial.print(response); Serial.println("####");
+		//Serial.print(F("####")); Serial.print(response); Serial.println(F("####"));
 		//if (response.substring(0, 5) == F("+CMT:"))
 		//if (response.indexOf("+CMT:") != -1)
 		if (response.indexOf("+CMGL:") != -1)
