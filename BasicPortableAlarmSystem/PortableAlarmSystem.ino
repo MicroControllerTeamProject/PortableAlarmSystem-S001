@@ -1017,6 +1017,7 @@ void blueToothConfigurationSystem()
 				splitString.toCharArray(_bufExternalInterruptIsON, BUFSIZEEXTERNALINTERRUPTISON);
 				eepromRW->eeprom_write_string(_addressExternalInterruptIsOn, _bufExternalInterruptIsON);
 				_isExternalInterruptOn = atoi(&_bufExternalInterruptIsON[0]);
+				_isExtenalInterruptNormalyClosed = true;
 			}
 			loadConfigurationMenu();
 		}
@@ -1349,7 +1350,7 @@ void listOfSmsCommands(String command)
 		findOutPhonesONAndSetBluetoothInMasterModeActivity();
 		blinkLed(500, 3);
 	}
-	//Attiva External interrupt
+	//Attiva External interrupt normalmente aperto
 	if (command == F("Eo"))
 	{
 		_isBTSleepON = true;
@@ -1366,7 +1367,7 @@ void listOfSmsCommands(String command)
 	{
 		_isExternalInterruptOn = 0;
 	}
-
+	//Attiva External interrupt normalmente chiuso
 	if (command == F("Ec"))
 	{
 		_isBTSleepON = true;
