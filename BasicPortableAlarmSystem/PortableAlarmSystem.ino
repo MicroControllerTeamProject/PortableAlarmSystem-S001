@@ -146,7 +146,7 @@ float _voltageMinValue = 0;
 
 bool _isMasterMode = false;
 
-bool _isExtenalInterruptNormalyClosed = false;
+bool _isExtenalInterruptNormalyClosed = true;
 
 unsigned long _timeToTurnOnAlarm = millis() + 300000;
 
@@ -1017,7 +1017,6 @@ void blueToothConfigurationSystem()
 				splitString.toCharArray(_bufExternalInterruptIsON, BUFSIZEEXTERNALINTERRUPTISON);
 				eepromRW->eeprom_write_string(_addressExternalInterruptIsOn, _bufExternalInterruptIsON);
 				_isExternalInterruptOn = atoi(&_bufExternalInterruptIsON[0]);
-				_isExtenalInterruptNormalyClosed = true;
 			}
 			loadConfigurationMenu();
 		}
