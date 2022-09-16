@@ -14,7 +14,7 @@
 #include "ActivityManager.h"
 
 
-char version[15] = "S001 7.85-RTM";
+char version[15] = "S001 7.86-RTM";
 
 //Library version : 6.55-RTM
 
@@ -233,13 +233,17 @@ void setup()
 
 	mySim900->ATCommand("AT+CNETLIGHT=0");
 
+	delay(500);
+
 	mySim900->ATCommand("AT+CPMS=\"SM\"");
+	delay(500);
 	/*if (mySim900->IsAvailable() > 0)
 	{
 		String s = mySim900->ReadIncomingChars2();
 		Serial.println(s);
 	}*/
 	mySim900->ATCommand("AT+CMGF=1");
+	delay(500);
 	/*delay(5000);
 	if (mySim900->IsAvailable() > 0)
 	{
