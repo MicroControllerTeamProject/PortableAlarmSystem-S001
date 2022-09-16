@@ -1240,7 +1240,7 @@ void readIncomingSMS()
 	if (mySim900->IsAvailable() > 0)
 	{
 		String response = mySim900->ReadIncomingChars2();
-		delay(500);
+		delay(1000);
 		response.trim();
 		//Serial.print(F("####")); Serial.print(response); Serial.println(F("####"));
 		//if (response.substring(0, 5) == F("+CMT:"))
